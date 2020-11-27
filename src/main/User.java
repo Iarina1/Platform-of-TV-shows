@@ -12,7 +12,7 @@ public class User {
     private final String subscriptionType;
     private final Map<String, Integer> history;
     private final ArrayList<String> favoriteMovies;
-    private int nrRatings = 0;
+    private int nrRatings;
 
     @Override
     public String toString() {
@@ -33,6 +33,7 @@ public class User {
             this.history.put(historyString, history.get(historyString));
         }
         this.favoriteMovies = favoriteMovies;
+        this.nrRatings = 0;
     }
 
     public int getNrRatings() {
@@ -62,6 +63,7 @@ public class User {
         }
 
         if (this.getHistory().containsKey(title)) {
+            this.favoriteMovies.add(title);
             return Constants.SUCCESS + title + Constants.ADD_TO_FAVORITE;
         }
 
@@ -90,7 +92,6 @@ public class User {
     }
 
     public static String getSortedList(ArrayList<User> userList, int n, String sortType) {
-        ArrayList<User> userRatingsMaxN = new ArrayList<User>();
         ArrayList<User> userRatings = new ArrayList<User>();
         ArrayList<String> userNames = new ArrayList<String >();
 
@@ -115,10 +116,7 @@ public class User {
             return Constants.QUERY_RESULT + userNames.toString();
         } else {
             for (int i = 0; i < n; i++) {
-                userRatingsMaxN.add(userList.get(i));
-            }
-            for (User user : userRatingsMaxN) {
-                userNames.add(user.getUsername());
+                userNames.add(userRatings.get(i).getUsername());
             }
             return Constants.QUERY_RESULT + userNames.toString();
         }

@@ -56,7 +56,7 @@ public class Movie extends ShowInput {
 
     public String getRating(String title, double grade, User user) {
         if (this.userArrayList.contains(user.getUsername())) {
-            return Constants.ERROR + title + Constants.IS_RATED;
+            return Constants.ERROR + title + Constants.HAS_BEEN_RATED;
         } else if (!user.getHistory().containsKey(title)) {
             return Constants.ERROR + title + Constants.NOT_SEEN;
         } else {
@@ -69,6 +69,7 @@ public class Movie extends ShowInput {
     }
 
     public static ArrayList<String> getResult(LinkedHashMap<String, Integer> moviesLinkedHashMap, String sortType, int n) {
+        ArrayList<String> moviesNames = new ArrayList<String >();
         List<Map.Entry<String, Integer>> moviesSorted = new ArrayList<Map.Entry<String, Integer>>(moviesLinkedHashMap.entrySet());
 
         Collections.sort(moviesSorted, new Comparator<Map.Entry<String, Integer>>() {
@@ -85,8 +86,6 @@ public class Movie extends ShowInput {
         if (sortType.equals("desc")) {
             Collections.reverse(moviesSorted);
         }
-
-        ArrayList<String> moviesNames = new ArrayList<String >();
 
         if (moviesSorted.size() < n) {
             for (int i = 0; i < moviesSorted.size(); i++) {
@@ -160,6 +159,11 @@ public class Movie extends ShowInput {
         ArrayList<String> moviesNames = new ArrayList<>();
         LinkedHashMap<String, Integer> moviesFavourite = new LinkedHashMap<String, Integer>();
 
+//        for (Movie movie : movies) {
+//            System.out.println(movie.getTitle());
+//        }
+//        System.out.println(n);
+//        System.out.println(movies.size());
         for (int i = 0; i < movies.size(); i++) {
             for (User user : users) {
                 if (user.getFavoriteMovies().contains(movies.get(i).getTitle())) {
@@ -179,6 +183,7 @@ public class Movie extends ShowInput {
 
     public static ArrayList<String> getResultRating(LinkedHashMap<String, Double> moviesLinkedHashMap, String sortType, int n) {
         List<Map.Entry<String, Double>> moviesSorted = new ArrayList<Map.Entry<String, Double>>(moviesLinkedHashMap.entrySet());
+        ArrayList<String> moviesNames = new ArrayList<String >();
 
         Collections.sort(moviesSorted, new Comparator<Map.Entry<String, Double>>() {
             public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
@@ -193,8 +198,6 @@ public class Movie extends ShowInput {
         if (sortType.equals("desc")) {
             Collections.reverse(moviesSorted);
         }
-
-        ArrayList<String> moviesNames = new ArrayList<String >();
 
         if (moviesSorted.size() < n) {
             for (int i = 0; i < moviesSorted.size(); i++) {

@@ -2,6 +2,7 @@ package main;
 
 import actor.ActorsAwards;
 import common.Constants;
+import utils.Utils;
 
 import java.util.*;
 
@@ -99,7 +100,7 @@ public class Actor {
             int isGood = 1;
 
             for (String award : awards) {
-                if (!actor.getAwards().containsKey(award)) {
+                if (!actor.getAwards().containsKey(Utils.stringToAwards(award))) {
                     isGood = 0;
                 }
             }
