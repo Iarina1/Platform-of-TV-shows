@@ -6,6 +6,7 @@ import common.Constants;
 import fileio.*;
 import org.json.simple.JSONArray;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -70,6 +71,7 @@ public final class Main {
         JSONArray arrayResult = new JSONArray();
 
         //TODO add here the entry point to your implementation
+        ArrayList<String> movieArrayList = new ArrayList<String>();
 
         ArrayList<User> usersList = new ArrayList<>();
         for (UserInputData userInputData : input.getUsers()) {
@@ -91,6 +93,13 @@ public final class Main {
                     serialInputData.getGenres(), serialInputData.getNumberSeason(),
                     serialInputData.getSeasons(), serialInputData.getYear());
             serialsList.add(serial);
+        }
+
+        ArrayList<Actor> actorList = new ArrayList<>();
+        for (ActorInputData actorInputData : input.getActors()) {
+            Actor actor = new Actor(actorInputData.getName(), actorInputData.getCareerDescription(),
+                    actorInputData.getFilmography(), actorInputData.getAwards());
+            actorList.add(actor);
         }
 
         for (int i = 0; i < input.getCommands().size(); i++) {
@@ -120,15 +129,15 @@ public final class Main {
                             for (int k = 0; k < input.getMovies().size(); k++) {
                                 if (input.getMovies().get(k).getTitle().equals(input.getCommands()
                                         .get(i).getTitle())) {
-                                    Movie movie = new Movie(input.getMovies().get(k).getTitle(),
-                                            input.getMovies().get(k).getCast(),
-                                            input.getMovies().get(k).getGenres(), input.getMovies()
-                                            .get(k).getYear(), input.getMovies().get(k).getYear());
-                                    arrayResult.add(fileWriter.writeFile(input.getCommands()
-                                                    .get(i).getActionId(), null,
-                                            movie.getRating(input.getCommands().get(i).getTitle(),
-                                                    input.getCommands().get(i).getGrade(),
-                                                    usersList.get(j))));
+                                    for (Movie movie : moviesList) {
+                                        if (movie.getTitle().equals(input.getMovies().get(k).getTitle())) {
+                                            arrayResult.add(fileWriter.writeFile(input.getCommands()
+                                                        .get(i).getActionId(), null,
+                                                movie.getRating(input.getCommands().get(i).getTitle(),
+                                                        input.getCommands().get(i).getGrade(),
+                                                        usersList.get(j))));
+                                        }
+                                    }
                                 }
                             }
                             for (int k = 0; k < input.getSerials().size(); k++) {
@@ -300,10 +309,20 @@ public final class Main {
                                 input.getCommands().get(i).getNumber(),
                                 input.getCommands().get(i).getSortType())));
                     }
+                } if (input.getCommands().get(i).getObjectType().equals(Constants.ACTORS)) {
+                    if (input.getCommands().get(i).getCriteria().equals(Constants.FILTER_DESCRIPTIONS)) {
+                        arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
+                                .getActionId(), null, Actor.getFilterDescription(actorList,
+                                input.getCommands().get(i).getFilters().get(2),
+                                input.getCommands().get(i).getSortType())));
+                    } else if (input.getCommands().get(i).getCriteria().equals(Constants.AWARDS)) {
+                        arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
+                                .getActionId(), null, Actor.getQueryAwards( actorList,
+                                input.getCommands().get(i).getFilters().get(3), input
+                                .getCommands().get(i).getSortType())));
+                    }
                 }
-
             }
-
         }
         fileWriter.closeJSON(arrayResult);
     }

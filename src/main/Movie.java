@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Movie extends ShowInput {
     private final int duration;
-    private ArrayList<User> userArrayList;
+    private ArrayList<String> userArrayList;
     private int sum;
     private double average;
 
@@ -27,15 +27,15 @@ public class Movie extends ShowInput {
                  final int year, final int duration) {
         super(title, year, cast, genres);
         this.duration = duration;
-        userArrayList = new ArrayList<User>();
+        userArrayList = new ArrayList<String>();
         this.sum = 0;
         this.average = 0;
     }
 
-    public ArrayList<User> getUserArrayList() {
+    public ArrayList<String> getUserArrayList() {
         return userArrayList;
     }
-    public void setUserArrayList(ArrayList<User> userArrayList) {
+    public void setUserArrayList(ArrayList<String> userArrayList) {
         this.userArrayList = userArrayList;
     }
     public void setSum(int sum) {
@@ -60,7 +60,7 @@ public class Movie extends ShowInput {
         } else if (!user.getHistory().containsKey(title)) {
             return Constants.ERROR + title + Constants.NOT_SEEN;
         } else {
-            this.userArrayList.add(user);
+            this.userArrayList.add(user.getUsername());
             this.sum += grade;
             this.average = this.sum / userArrayList.size();
             user.setNrRatings(user.getNrRatings() + 1);
