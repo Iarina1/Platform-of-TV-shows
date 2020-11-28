@@ -325,7 +325,21 @@ public final class Main {
                     }
                 }
             } else if(input.getCommands().get(i).getActionType().equals(Constants.RECOMMENDATION)) {
-                
+                if(input.getCommands().get(i).getType().equals(Constants.STANDARD)) {
+                    arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
+                            .getActionId(), null, User.RecommendationStandard(usersList, showList,
+                            input.getCommands().get(i).getUsername())));
+                } else if(input.getCommands().get(i).getType().equals(Constants.BEST_UNSEEN)) {
+                    arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
+                            .getActionId(), null, User.BestUnseenRecommendation(usersList, showList,
+                            input.getCommands().get(i).getUsername())));
+                } else if(input.getCommands().get(i).getType().equals(Constants.SEARCH)) {
+//                    SearchRecommendation(ArrayList<User> users, ArrayList<Show> shows, String username, String genre)
+                    arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
+                            .getActionId(), null, User.SearchRecommendation(usersList, showList,
+                            input.getCommands().get(i).getUsername(), input.getCommands().get(i)
+                    .getGenre())));
+                }
             }
         }
         fileWriter.closeJSON(arrayResult);

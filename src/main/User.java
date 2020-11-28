@@ -121,4 +121,97 @@ public class User {
             return Constants.QUERY_RESULT + userNames.toString();
         }
     }
+
+    public static String RecommendationStandard(ArrayList<User> users, ArrayList<Show> shows, String username) {
+        for(User user : users) {
+            if(user.getUsername().equals(username)) {
+                for(Show show : shows) {
+                    if(!user.getHistory().containsKey(show.getTitle())) {
+                        return Constants.STANDARD_RESULT + show.getTitle();
+                    }
+                }
+            }
+        }
+        return Constants.STANDARD_NOT_APPLIED;
+    }
+
+    public static String BestUnseenRecommendation(ArrayList<User> users, ArrayList<Show> shows, String username) {
+        LinkedHashMap<String, Double> showsBackup = new LinkedHashMap<>();
+        for(Show show : shows) {
+            showsBackup.put(show.getTitle(), show.Average());
+        }
+
+        List<Map.Entry<String, Double>> showSorted = new ArrayList<Map.Entry<String, Double>>(showsBackup.entrySet());
+        ArrayList<String> showsNames = new ArrayList<String >();
+
+        Collections.sort(showSorted, new Comparator<Map.Entry<String, Double>>() {
+            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                return (int)((o2.getValue() - o1.getValue()) * 100);
+            }
+        });
+
+        for(User user : users) {
+            if(user.getUsername().equals(username)) {
+                for(int i = 0; i < showSorted.size(); i++) {
+                    if(!user.getHistory().containsKey(showSorted.get(i).getKey())) {
+                        return Constants.BEST_RESULT + showSorted.get(i).getKey();
+                    }
+                }
+            }
+        }
+        return Constants.BEST_UNSEEN_NOT_APPLIED;
+    }
+
+    public static ArrayList<String> getSearchSorted(LinkedHashMap<String, Double> showsLinkedHashMap) {
+        List<Map.Entry<String, Double>> showsSorted = new ArrayList<Map.Entry<String, Double>>(showsLinkedHashMap.entrySet());
+        ArrayList<String> showsNames = new ArrayList<String >();
+
+        Collections.sort(showsSorted, new Comparator<Map.Entry<String, Double>>() {
+            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                if (o1.getValue().equals(o2.getValue())) {
+                    return (o1.getKey().compareTo(o2.getKey()));
+                } else {
+                    return (int)((o1.getValue() - o2.getValue()) * 100);
+                }
+            }
+        });
+
+        for (int i = 0; i < showsSorted.size(); i++) {
+            showsNames.add(showsSorted.get(i).getKey());
+        }
+        return showsNames;
+    }
+
+    public static String SearchRecommendation(ArrayList<User> users, ArrayList<Show> shows, String username, String genre) {
+        LinkedHashMap<String, Double> showsBackup = new LinkedHashMap<>();
+        ArrayList<String> showsNames = new ArrayList<String >();
+        ArrayList<String> showsRecommendation = new ArrayList<String >();
+        int sem = 0;
+
+        for(Show show : shows) {
+            if(show.getGenres().contains(genre)) {
+                showsBackup.put(show.getTitle(), show.Average());
+            }
+        }
+
+        for(User user : users) {
+            if(user.getUsername().equals(username)) {
+                if(user.getSubscriptionType().equals(Constants.PREMIUM)) {
+                    showsNames = getSearchSorted(showsBackup);
+                    for (int i = 0; i < showsNames.size(); i++) {
+                        if(!user.getHistory().containsKey(showsNames.get(i))) {
+                            showsRecommendation.add(showsNames.get(i));
+                            sem  = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(sem == 0) {
+            return Constants.SEARCH_NOT_APPLIED;
+        } else {
+            return Constants.SEARCH_RESULT + showsRecommendation;
+        }
+    }
 }
