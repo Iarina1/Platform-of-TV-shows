@@ -139,5 +139,60 @@ public class Actor {
 
         return Constants.QUERY_RESULT + actorsName.toString();
     }
+
+    public static ArrayList<String> getResultAverage(LinkedHashMap<String, Double> actorsLinkedHashMap, String sortType, int n) {
+        List<Map.Entry<String, Double>> actorsSorted = new ArrayList<Map.Entry<String, Double>>(actorsLinkedHashMap.entrySet());
+        ArrayList<String> actorsNames = new ArrayList<String >();
+
+        Collections.sort(actorsSorted, new Comparator<Map.Entry<String, Double>>() {
+            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                if (o1.getValue() == o2.getValue()) {
+                    return (o1.getKey().compareTo(o2.getKey()));
+                } else {
+                    return (int)((o1.getValue() - o2.getValue()) * 100);
+                }
+            }
+        });
+
+        if (sortType.equals("desc")) {
+            Collections.reverse(actorsSorted);
+        }
+
+        if (actorsSorted.size() < n) {
+            for (int i = 0; i < actorsSorted.size(); i++) {
+                actorsNames.add(actorsSorted.get(i).getKey());
+            }
+            return actorsNames;
+        } else {
+            for (int i = 0; i < n; i++) {
+                actorsNames.add(actorsSorted.get(i).getKey());
+            }
+            return actorsNames;
+        }
+    }
+
+    public static String getQueryAverage(ArrayList<Actor> actors, int n, String sortType, ArrayList<Show> shows) {
+        LinkedHashMap<String, Double> actorsAverage = new LinkedHashMap<>();
+        ArrayList<String> actorsNames = new ArrayList<>();
+        for (Actor actor : actors) {
+            double sum = 0, average;
+            int nr = 0;
+            for (int i = 0; i < actor.getFilmography().size(); i++) {
+                for (Show show : shows) {
+                    if (show.getTitle().equals(actor.getFilmography().get(i))) {
+                        sum += show.Average();
+                        nr++;
+                    }
+                }
+            }
+            average = sum / nr;
+            if (average != 0) {
+                actorsAverage.put(actor.getName(), average);
+            }
+        }
+
+        actorsNames = getResultAverage(actorsAverage, sortType, n);
+        return Constants.QUERY_RESULT + actorsNames.toString();
+    }
 }
 

@@ -80,11 +80,14 @@ public final class Main {
             usersList.add(user);
         }
 
+        ArrayList<Show> showList = new ArrayList<>();
+
         ArrayList<Movie> moviesList = new ArrayList<>();
         for (MovieInputData movieInputData : input.getMovies()) {
             Movie movie = new Movie(movieInputData.getTitle(), movieInputData.getCast(),
                     movieInputData.getGenres(), movieInputData.getYear(), movieInputData.getDuration());
             moviesList.add(movie);
+            showList.add(movie);
         }
 
         ArrayList<Serial> serialsList = new ArrayList<>();
@@ -93,6 +96,7 @@ public final class Main {
                     serialInputData.getGenres(), serialInputData.getNumberSeason(),
                     serialInputData.getSeasons(), serialInputData.getYear());
             serialsList.add(serial);
+            showList.add(serial);
         }
 
         ArrayList<Actor> actorList = new ArrayList<>();
@@ -315,7 +319,8 @@ public final class Main {
                                 .getCommands().get(i).getSortType())));
                     } else if (input.getCommands().get(i).getCriteria().equals(Constants.AVERAGE)) {
                         arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
-                                .getActionId(), null, "bla"));
+                                .getActionId(), null, Actor.getQueryAverage( actorList, input.getCommands()
+                                .get(i).getNumber(), input.getCommands().get(i).getSortType(), showList)));
                     }
                 }
             }

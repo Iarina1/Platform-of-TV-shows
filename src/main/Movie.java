@@ -7,11 +7,11 @@ import org.w3c.dom.ls.LSOutput;
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.*;
 
-public class Movie extends ShowInput {
+public class Movie extends Show {
     private final int duration;
     private ArrayList<String> userArrayList;
-    private int sum;
-    private double average;
+    private Double sum;
+    private Double average;
 
     @Override
     public String toString() {
@@ -28,8 +28,8 @@ public class Movie extends ShowInput {
         super(title, year, cast, genres);
         this.duration = duration;
         userArrayList = new ArrayList<String>();
-        this.sum = 0;
-        this.average = 0;
+        this.sum = 0.0;
+        this.average = 0.0;
     }
 
     public ArrayList<String> getUserArrayList() {
@@ -38,24 +38,27 @@ public class Movie extends ShowInput {
     public void setUserArrayList(ArrayList<String> userArrayList) {
         this.userArrayList = userArrayList;
     }
-    public void setSum(int sum) {
+    public void setSum(Double sum) {
         this.sum = sum;
     }
-    public void setAverage(double average) {
+    public void setAverage(Double average) {
         this.average = average;
     }
-    public int getSum() {
+    public Double getSum() {
         return sum;
     }
-    public double getAverage() {
-        return average;
+
+    public Double Average() {
+//        System.out.println(Double.toString(this.average) + " movie " + this.getTitle());
+        return this.average;
     }
     public int getDuration() {
         return duration;
     }
 
-    public String getRating(String title, double grade, User user) {
+    public String getRating(String title, Double grade, User user) {
         if (this.userArrayList.contains(user.getUsername())) {
+            System.out.println(title);
             return Constants.ERROR + title + Constants.HAS_BEEN_RATED;
         } else if (!user.getHistory().containsKey(title)) {
             return Constants.ERROR + title + Constants.NOT_SEEN;
@@ -63,6 +66,10 @@ public class Movie extends ShowInput {
             this.userArrayList.add(user.getUsername());
             this.sum += grade;
             this.average = this.sum / userArrayList.size();
+            if (title.equals("Killing Eve")) {
+                System.out.println(sum + " " + userArrayList.size() + " " + average + " " + user.getUsername());
+//                System.out.println((double) (13.0/2));
+            }
             user.setNrRatings(user.getNrRatings() + 1);
             return Constants.SUCCESS + title + Constants.WAS_RATED + grade + Constants.BY + user.getUsername();
         }
@@ -187,7 +194,7 @@ public class Movie extends ShowInput {
 
         Collections.sort(moviesSorted, new Comparator<Map.Entry<String, Double>>() {
             public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-                if (o1.getValue() == o2.getValue()) {
+                if (o1.getValue().equals(o2.getValue())) {
                     return (o1.getKey().compareTo(o2.getKey()));
                 } else {
                     return (int)((o1.getValue() - o2.getValue()) * 100);
@@ -218,8 +225,8 @@ public class Movie extends ShowInput {
         LinkedHashMap<String, Double> moviesRated = new LinkedHashMap<String, Double>();
 
         for (Movie movie :  movies) {
-            if(!moviesRated.containsKey(movie.getTitle()) && movie.getAverage() != 0) {
-                moviesRated.put(movie.getTitle(), movie.getAverage());
+            if(!moviesRated.containsKey(movie.getTitle()) && movie.Average() != 0) {
+                moviesRated.put(movie.getTitle(), movie.Average());
             }
         }
 

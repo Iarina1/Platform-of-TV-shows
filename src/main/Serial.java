@@ -9,8 +9,8 @@ public class Serial extends Show {
     private final int numberOfSeasons;
     private final ArrayList<Season> seasons;
     private Map<User, ArrayList<Integer>> userEvidence;
-    private int sum;
-    private double average;
+    private LinkedHashMap<Integer, ArrayList<Double>> gradeSeasons; // pt fiecare sezon avem suma, nr de ratinguri primite, media
+    private Double average;
 
     @Override
     public String toString() {
@@ -27,25 +27,29 @@ public class Serial extends Show {
         this.numberOfSeasons = numberOfSeasons;
         this.seasons = seasons;
         userEvidence = new LinkedHashMap<User, ArrayList<Integer>>();
-        this.sum = 0;
-        this.average = 0;
+        gradeSeasons = new LinkedHashMap<Integer, ArrayList<Double>>();
+        for (int i = 0; i < numberOfSeasons; i++) {
+            ArrayList<Double> newGrades = new ArrayList<>();
+            newGrades.add((double)0);
+            newGrades.add((double)0);
+            newGrades.add((double)0);
+            gradeSeasons.put(i, newGrades);
+        }
+        average = 0.0;
     }
 
     public void setUserEvidence(Map<User, ArrayList<Integer>> userEvidence) {
         this.userEvidence = userEvidence;
     }
-    public int getSum() {
-        return sum;
+
+
+    public Double Average() {
+        return this.average;
     }
-    public void setSum(int sum) {
-        this.sum = sum;
-    }
-    public double getAverage() {
-        return average;
-    }
-    public void setAverage(double average) {
+    public void setAverage(Double average) {
         this.average = average;
     }
+
     public Map<User, ArrayList<Integer>> getUserEvidence() {
         return userEvidence;
     }
@@ -56,16 +60,31 @@ public class Serial extends Show {
         return seasons;
     }
 
-    public String getRating(String title, double grade, User user, int season) {
+    public String getRating(String title, Double grade, User user, int season) {
         if (this.userEvidence.containsKey(user)) {
-            ArrayList<Integer> seasonRated = new ArrayList<Integer>();
-            seasonRated = this.userEvidence.get(user);
-            if (seasonRated.contains(season)) {
+            if (this.userEvidence.get(user).contains(season)) {
                 return Constants.ERROR + title + Constants.HAS_BEEN_RATED;
             } else {
-                seasonRated.add(season);
-                sum += grade;
-                average = sum / userEvidence.size();
+                this.userEvidence.get(user).add(season);
+                if (gradeSeasons.containsKey(season)) {
+                    ArrayList<Double> newGrades = new ArrayList<Double>();
+                    newGrades.add(gradeSeasons.get(season).get(0) + grade);
+                    newGrades.add(gradeSeasons.get(season).get(1) + 1);
+                    newGrades.add(newGrades.get(0) / newGrades.get(1));
+                    gradeSeasons.put(season, newGrades);
+                } else {
+                    ArrayList<Double> newGrades = new ArrayList<>();
+                    newGrades.add(grade);
+                    newGrades.add((double)1);
+                    newGrades.add(grade);
+                    gradeSeasons.put(season, newGrades);
+                }
+                Double sum = 0.0;
+                for (int i = 0; i < gradeSeasons.size(); i++) {
+                    sum += gradeSeasons.get(i).get(0);
+                }
+                Double average = sum / gradeSeasons.size();
+                this.setAverage(average);
                 user.setNrRatings(user.getNrRatings() + 1);
                 return Constants.SUCCESS + title + Constants.WAS_RATED + grade + Constants.BY + user.getUsername();
             }
@@ -74,8 +93,25 @@ public class Serial extends Show {
                 ArrayList<Integer> seasonRated = new ArrayList<Integer>();
                 seasonRated.add(season);
                 userEvidence.put(user, seasonRated);
-                sum += grade;
-                average = sum / userEvidence.size();
+                if (gradeSeasons.containsKey(season)) {
+                    ArrayList<Double> newGrades = new ArrayList<Double>();
+                    newGrades.add(gradeSeasons.get(season).get(0) + grade);
+                    newGrades.add(gradeSeasons.get(season).get(1) + 1);
+                    newGrades.add(newGrades.get(0) / newGrades.get(1));
+                    gradeSeasons.put(season, newGrades);
+                } else {
+                    ArrayList<Double> newGrades = new ArrayList<>();
+                    newGrades.add(grade);
+                    newGrades.add((double)1);
+                    newGrades.add(grade);
+                    gradeSeasons.put(season, newGrades);
+                }
+                Double sum = 0.0;
+                for (int i = 0; i < gradeSeasons.size(); i++) {
+                    sum += gradeSeasons.get(i).get(0);
+                }
+                Double average = sum / gradeSeasons.size();
+                this.setAverage(average);
                 user.setNrRatings(user.getNrRatings() + 1);
                 return Constants.SUCCESS + title + Constants.WAS_RATED + grade + Constants.BY + user.getUsername();
             } else {
@@ -207,7 +243,7 @@ public class Serial extends Show {
 
         Collections.sort(serialsSorted, new Comparator<Map.Entry<String, Double>>() {
             public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-                if (o1.getValue() == o2.getValue()) {
+                if (o1.getValue().equals(o2.getValue())) {
                     return (o1.getKey().compareTo(o2.getKey()));
                 } else {
                     return (int)((o1.getValue() - o2.getValue()) * 100);
@@ -240,8 +276,8 @@ public class Serial extends Show {
         LinkedHashMap<String, Double> serialsRated = new LinkedHashMap<String, Double>();
 
         for (Serial serial :  serials) {
-            if(!serialsRated.containsKey(serial.getTitle()) && serial.getAverage() != 0) {
-                serialsRated.put(serial.getTitle(), serial.getAverage());
+            if(!serialsRated.containsKey(serial.getTitle()) && serial.Average() != 0) {
+                serialsRated.put(serial.getTitle(), serial.Average());
             }
         }
 

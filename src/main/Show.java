@@ -1,5 +1,6 @@
 package main;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 
 public class Show {
@@ -7,6 +8,7 @@ public class Show {
     private final int year;
     private final ArrayList<String> cast;
     private final ArrayList<String> genres;
+    private final Double average = 0.0;
 
     public Show(final String title, final int year, final ArrayList<String> cast,
                 final ArrayList<String> genres) {
@@ -31,4 +33,8 @@ public class Show {
     public ArrayList<String> getGenres() {
         return genres;
     }
+
+    public Double Average() {
+        return average;
+    };
 }
