@@ -28,7 +28,7 @@ public class Serial extends Show {
         this.seasons = seasons;
         userEvidence = new LinkedHashMap<User, ArrayList<Integer>>();
         gradeSeasons = new LinkedHashMap<Integer, ArrayList<Double>>();
-        for (int i = 0; i < numberOfSeasons; i++) {
+        for (int i = 1; i < numberOfSeasons + 1; i++) {
             ArrayList<Double> newGrades = new ArrayList<>();
             newGrades.add((double)0);
             newGrades.add((double)0);
@@ -42,7 +42,7 @@ public class Serial extends Show {
         this.userEvidence = userEvidence;
     }
 
-
+    @Override
     public Double Average() {
         return this.average;
     }
@@ -66,21 +66,19 @@ public class Serial extends Show {
                 return Constants.ERROR + title + Constants.HAS_BEEN_RATED;
             } else {
                 this.userEvidence.get(user).add(season);
-                if (gradeSeasons.containsKey(season)) {
-                    ArrayList<Double> newGrades = new ArrayList<Double>();
-                    newGrades.add(gradeSeasons.get(season).get(0) + grade);
-                    newGrades.add(gradeSeasons.get(season).get(1) + 1);
-                    newGrades.add(newGrades.get(0) / newGrades.get(1));
-                    gradeSeasons.put(season, newGrades);
-                } else {
-                    ArrayList<Double> newGrades = new ArrayList<>();
-                    newGrades.add(grade);
-                    newGrades.add((double)1);
-                    newGrades.add(grade);
-                    gradeSeasons.put(season, newGrades);
-                }
+                ArrayList<Double> newGrades = new ArrayList<Double>();
+                newGrades.add(gradeSeasons.get(season).get(0) + grade);
+                newGrades.add(gradeSeasons.get(season).get(1) + 1);
+                newGrades.add(newGrades.get(0) / newGrades.get(1));
+                gradeSeasons.put(season, newGrades);
+//                if (title.equals("Killing Eve")) {
+//                    for (int i = 1; i < gradeSeasons.size() + 1; i++) {
+//                        System.out.println(i + " " + gradeSeasons.get(i).get(0) + " " + gradeSeasons.get(i).get(1) + " " + gradeSeasons.get(i).get(2));
+//                    }
+//                    System.out.println();
+//                }
                 Double sum = 0.0;
-                for (int i = 0; i < gradeSeasons.size(); i++) {
+                for (int i = 1; i < gradeSeasons.size() + 1; i++) {
                     sum += gradeSeasons.get(i).get(0);
                 }
                 Double average = sum / gradeSeasons.size();
@@ -93,21 +91,19 @@ public class Serial extends Show {
                 ArrayList<Integer> seasonRated = new ArrayList<Integer>();
                 seasonRated.add(season);
                 userEvidence.put(user, seasonRated);
-                if (gradeSeasons.containsKey(season)) {
-                    ArrayList<Double> newGrades = new ArrayList<Double>();
-                    newGrades.add(gradeSeasons.get(season).get(0) + grade);
-                    newGrades.add(gradeSeasons.get(season).get(1) + 1);
-                    newGrades.add(newGrades.get(0) / newGrades.get(1));
-                    gradeSeasons.put(season, newGrades);
-                } else {
-                    ArrayList<Double> newGrades = new ArrayList<>();
-                    newGrades.add(grade);
-                    newGrades.add((double)1);
-                    newGrades.add(grade);
-                    gradeSeasons.put(season, newGrades);
-                }
+                ArrayList<Double> newGrades = new ArrayList<Double>();
+                newGrades.add(gradeSeasons.get(season).get(0) + grade);
+                newGrades.add(gradeSeasons.get(season).get(1) + 1);
+                newGrades.add(newGrades.get(0) / newGrades.get(1));
+                gradeSeasons.put(season, newGrades);
+//                if (title.equals("Killing Eve")) {
+//                    for (int i = 1; i < gradeSeasons.size() + 1; i++) {
+//                        System.out.println(i + " " + gradeSeasons.get(i).get(0) + " " + gradeSeasons.get(i).get(1) + " " + gradeSeasons.get(i).get(2));
+//                    }
+//                    System.out.println();
+//                }
                 Double sum = 0.0;
-                for (int i = 0; i < gradeSeasons.size(); i++) {
+                for (int i = 1; i < gradeSeasons.size() + 1; i++) {
                     sum += gradeSeasons.get(i).get(0);
                 }
                 Double average = sum / gradeSeasons.size();

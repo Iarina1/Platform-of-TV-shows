@@ -7,6 +7,7 @@ import fileio.*;
 import org.json.simple.JSONArray;
 
 import javax.sound.midi.Soundbank;
+import javax.swing.plaf.ScrollPaneUI;
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.File;
 import java.io.IOException;
@@ -323,6 +324,8 @@ public final class Main {
                                 .get(i).getNumber(), input.getCommands().get(i).getSortType(), showList)));
                     }
                 }
+            } else if(input.getCommands().get(i).getActionType().equals(Constants.RECOMMENDATION)) {
+                
             }
         }
         fileWriter.closeJSON(arrayResult);

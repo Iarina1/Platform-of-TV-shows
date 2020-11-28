@@ -119,7 +119,7 @@ public class Actor {
         Collections.sort(actorsSorted, new Comparator<Map.Entry<String, Integer>>() {
             @Override
             public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                if (o1.getValue() == o2.getValue()) {
+                if (o1.getValue().equals(o2.getValue())) {
                     return o1.getKey().compareTo(o2.getKey());
                 } else {
                     return o1.getValue() - o2.getValue();
@@ -146,7 +146,7 @@ public class Actor {
 
         Collections.sort(actorsSorted, new Comparator<Map.Entry<String, Double>>() {
             public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-                if (o1.getValue() == o2.getValue()) {
+                if (o1.getValue().equals(o2.getValue())) {
                     return (o1.getKey().compareTo(o2.getKey()));
                 } else {
                     return (int)((o1.getValue() - o2.getValue()) * 100);
@@ -171,25 +171,29 @@ public class Actor {
         }
     }
 
+
     public static String getQueryAverage(ArrayList<Actor> actors, int n, String sortType, ArrayList<Show> shows) {
         LinkedHashMap<String, Double> actorsAverage = new LinkedHashMap<>();
         ArrayList<String> actorsNames = new ArrayList<>();
         for (Actor actor : actors) {
-            double sum = 0, average;
+            double sum = 0;
             int nr = 0;
             for (int i = 0; i < actor.getFilmography().size(); i++) {
                 for (Show show : shows) {
-                    if (show.getTitle().equals(actor.getFilmography().get(i))) {
+                    if (show.getTitle().equals(actor.getFilmography().get(i)) && (show.Average() != 0)) {
                         sum += show.Average();
                         nr++;
                     }
                 }
             }
-            average = sum / nr;
-            if (average != 0) {
-                actorsAverage.put(actor.getName(), average);
+            double average = 0;
+            if (nr != 0) {
+                average = sum / nr;
             }
+            actorsAverage.put(actor.getName(), average);
         }
+
+        while(actorsAverage.values().remove(0.0));
 
         actorsNames = getResultAverage(actorsAverage, sortType, n);
         return Constants.QUERY_RESULT + actorsNames.toString();

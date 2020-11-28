@@ -48,8 +48,8 @@ public class Movie extends Show {
         return sum;
     }
 
+    @Override
     public Double Average() {
-//        System.out.println(Double.toString(this.average) + " movie " + this.getTitle());
         return this.average;
     }
     public int getDuration() {
@@ -58,7 +58,6 @@ public class Movie extends Show {
 
     public String getRating(String title, Double grade, User user) {
         if (this.userArrayList.contains(user.getUsername())) {
-            System.out.println(title);
             return Constants.ERROR + title + Constants.HAS_BEEN_RATED;
         } else if (!user.getHistory().containsKey(title)) {
             return Constants.ERROR + title + Constants.NOT_SEEN;
@@ -66,10 +65,6 @@ public class Movie extends Show {
             this.userArrayList.add(user.getUsername());
             this.sum += grade;
             this.average = this.sum / userArrayList.size();
-            if (title.equals("Killing Eve")) {
-                System.out.println(sum + " " + userArrayList.size() + " " + average + " " + user.getUsername());
-//                System.out.println((double) (13.0/2));
-            }
             user.setNrRatings(user.getNrRatings() + 1);
             return Constants.SUCCESS + title + Constants.WAS_RATED + grade + Constants.BY + user.getUsername();
         }
@@ -166,11 +161,6 @@ public class Movie extends Show {
         ArrayList<String> moviesNames = new ArrayList<>();
         LinkedHashMap<String, Integer> moviesFavourite = new LinkedHashMap<String, Integer>();
 
-//        for (Movie movie : movies) {
-//            System.out.println(movie.getTitle());
-//        }
-//        System.out.println(n);
-//        System.out.println(movies.size());
         for (int i = 0; i < movies.size(); i++) {
             for (User user : users) {
                 if (user.getFavoriteMovies().contains(movies.get(i).getTitle())) {
