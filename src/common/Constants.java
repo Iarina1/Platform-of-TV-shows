@@ -107,10 +107,12 @@ public final class Constants {
     public static final String STANDARD_RESULT = "StandardRecommendation result: ";
     public static final String BEST_RESULT = "BestRatedUnseenRecommendation result: ";
     public static final String SEARCH_RESULT = "SearchRecommendation result: ";
+    public static final String FAVORITE_RESULT = "FavoriteRecommendation result: ";
 
     public static final String STANDARD_NOT_APPLIED = "StandardRecommendation cannot be applied!";
     public static final String BEST_UNSEEN_NOT_APPLIED = "BestRatedUnseenRecommendation cannot be applied!";
     public static final String SEARCH_NOT_APPLIED = "SearchRecommendation cannot be applied!";
+    public static final String FAVORITE_NOT_APPLIED = "FavoriteRecommendation cannot be applied!";
 
 
     public static final String SEARCH = "search";

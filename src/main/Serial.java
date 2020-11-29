@@ -219,7 +219,7 @@ public class Serial extends Show {
 
         for (int i = 0; i < serials.size(); i++) {
             for (User user : users) {
-                if (user.getFavoriteMovies().contains(serials.get(i).getTitle())) {
+                if (user.getFavoriteShows().contains(serials.get(i).getTitle())) {
                     if (serialsFavourite.containsKey(serials.get(i).getTitle())) {
                         serialsFavourite.put(serials.get(i).getTitle(), serialsFavourite.get(serials.get(i).getTitle()) + 1);
                     } else {

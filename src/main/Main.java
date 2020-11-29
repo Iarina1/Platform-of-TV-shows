@@ -339,6 +339,10 @@ public final class Main {
                             .getActionId(), null, User.SearchRecommendation(usersList, showList,
                             input.getCommands().get(i).getUsername(), input.getCommands().get(i)
                     .getGenre())));
+                } else if(input.getCommands().get(i).getType().equals(Constants.FAVORITE)) {
+                    arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
+                            .getActionId(), null, User.getFavourite( usersList, showList,
+                            input.getCommands().get(i).getUsername())));
                 }
             }
         }

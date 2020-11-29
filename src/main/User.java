@@ -11,7 +11,7 @@ public class User {
     private final String username;
     private final String subscriptionType;
     private final Map<String, Integer> history;
-    private final ArrayList<String> favoriteMovies;
+    private final ArrayList<String> favoriteShows;
     private int nrRatings;
 
     @Override
@@ -20,19 +20,19 @@ public class User {
                 + "username='" + username + '\''
                 + ", subscriptionType='" + subscriptionType + '\''
                 + ", history=" + history
-                + ", favoriteMovies=" + favoriteMovies
+                + ", favoriteShows=" + favoriteShows
                 + '}';
     }
 
     public User(final String username, final String subscriptionType,
-                final Map<String, Integer> history, final ArrayList<String> favoriteMovies) {
+                final Map<String, Integer> history, final ArrayList<String> favoriteShows) {
         this.username = username;
         this.subscriptionType = subscriptionType;
         this.history = new LinkedHashMap<String, Integer>();
         for (String historyString : history.keySet()) {
             this.history.put(historyString, history.get(historyString));
         }
-        this.favoriteMovies = favoriteMovies;
+        this.favoriteShows = favoriteShows;
         this.nrRatings = 0;
     }
 
@@ -51,19 +51,19 @@ public class User {
     public Map<String, Integer> getHistory() {
         return history;
     }
-    public ArrayList<String> getFavoriteMovies() {
-        return favoriteMovies;
+    public ArrayList<String> getFavoriteShows() {
+        return favoriteShows;
     }
 
     public String addFavoriteList(String title) {
-        for (int i = 0; i < this.getFavoriteMovies().size(); i++) {
-            if (this.getFavoriteMovies().get(i).equals(title)) {
+        for (int i = 0; i < this.getFavoriteShows().size(); i++) {
+            if (this.getFavoriteShows().get(i).equals(title)) {
                 return Constants.ERROR + title + Constants.IS_IN_FAVORITE;
             }
         }
 
         if (this.getHistory().containsKey(title)) {
-            this.favoriteMovies.add(title);
+            this.favoriteShows.add(title);
             return Constants.SUCCESS + title + Constants.ADD_TO_FAVORITE;
         }
 
@@ -213,5 +213,52 @@ public class User {
         } else {
             return Constants.SEARCH_RESULT + showsRecommendation;
         }
+    }
+
+    public static ArrayList<String> getFavouriteSorted(LinkedHashMap<String, Integer> showsLinkedHashMap) {
+        ArrayList<String> showsNames = new ArrayList<String >();
+        List<Map.Entry<String, Integer>> showsSorted = new ArrayList<Map.Entry<String, Integer>>(showsLinkedHashMap.entrySet());
+
+        Collections.sort(showsSorted, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o2.getValue() - o1.getValue();
+            }
+        });
+
+        for (int i = 0; i < showsSorted.size(); i++) {
+            showsNames.add(showsSorted.get(i).getKey());
+        }
+        return showsNames;
+
+    }
+
+    public static String getFavourite(ArrayList<User> users, ArrayList<Show> shows, String username) {
+        LinkedHashMap<String, Integer> showsFavorite = new LinkedHashMap<>();
+        ArrayList<String> showsNames = new ArrayList<>();
+        for (User user : users) {
+            for(int i = 0;i < user.getFavoriteShows().size(); i++) {
+                if(!showsFavorite.containsKey(user.getFavoriteShows().get(i))) {
+                    showsFavorite.put(user.getFavoriteShows().get(i), 1);
+                } else {
+                    showsFavorite.put(user.getFavoriteShows().get(i), (showsFavorite.get(user.getFavoriteShows().get(i)) + 1));
+                }
+            }
+        }
+
+
+        for(User user : users) {
+            if(user.getUsername().equals(username)) {
+                if(user.getSubscriptionType().equals(Constants.PREMIUM)) {
+                    showsNames = getFavouriteSorted(showsFavorite);
+                    for (int i = 0; i < showsNames.size(); i++) {
+                        if(!user.getHistory().containsKey(showsNames.get(i))) {
+                            return Constants.FAVORITE_RESULT + showsNames.get(i);
+                        }
+                    }
+                }
+            }
+        }
+        return Constants.FAVORITE_NOT_APPLIED;
     }
 }

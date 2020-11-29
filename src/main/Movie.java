@@ -163,7 +163,7 @@ public class Movie extends Show {
 
         for (int i = 0; i < movies.size(); i++) {
             for (User user : users) {
-                if (user.getFavoriteMovies().contains(movies.get(i).getTitle())) {
+                if (user.getFavoriteShows().contains(movies.get(i).getTitle())) {
                     if (moviesFavourite.containsKey(movies.get(i).getTitle())) {
                         moviesFavourite.put(movies.get(i).getTitle(), moviesFavourite.get(movies.get(i).getTitle()) + 1);
                     } else {
