@@ -122,6 +122,7 @@ public final class Constants {
     public static final String POPULAR = "popular";
 
     public static final Integer ONE_HUNDRED = 100;
+    public static final String DESC = "desc";
 
     public static final String PREMIUM = "PREMIUM";
 }

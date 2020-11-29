@@ -4,7 +4,13 @@ import actor.ActorsAwards;
 import common.Constants;
 import utils.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Arrays;
 
 public class Actor {
     private String name;
@@ -56,6 +62,12 @@ public class Actor {
         this.awards = awards;
     }
 
+    /**
+     * @param actors
+     * @param filters
+     * @param sortType
+     * @return
+     */
     public static String getFilterDescription(final ArrayList<Actor> actors,
                                               final List<String> filters, final String sortType) {
         ArrayList<String> actorsNames = new ArrayList<String>();
@@ -79,13 +91,19 @@ public class Actor {
         }
 
         Collections.sort(actorsNames);
-        if (sortType.equals("desc")) {
+        if (sortType.equals(Constants.DESC)) {
             Collections.reverse(actorsNames);
         }
 
         return Constants.QUERY_RESULT + actorsNames.toString();
     }
 
+    /**
+     * @param actors
+     * @param awards
+     * @param sortType
+     * @return
+     */
     public static String getQueryAwards(final ArrayList<Actor> actors,
                                         final List<String> awards, final String sortType) {
         LinkedHashMap<String, Integer> actorsAwards = new LinkedHashMap<>();
@@ -123,7 +141,7 @@ public class Actor {
             }
         });
 
-        if (sortType.equals("desc")) {
+        if (sortType.equals(Constants.DESC)) {
             Collections.reverse(actorsSorted);
         }
 
@@ -136,7 +154,13 @@ public class Actor {
         return Constants.QUERY_RESULT + actorsName.toString();
     }
 
-    public static ArrayList<String> getResultAverage(
+    /**
+     * @param actorsLinkedHashMap
+     * @param sortType
+     * @param n
+     * @return
+     */
+    private static ArrayList<String> getResultAverage(
             final LinkedHashMap<String, Double> actorsLinkedHashMap,
             final String sortType, final int n) {
         List<Map.Entry<String, Double>> actorsSorted
@@ -154,7 +178,7 @@ public class Actor {
             }
         });
 
-        if (sortType.equals("desc")) {
+        if (sortType.equals(Constants.DESC)) {
             Collections.reverse(actorsSorted);
         }
 
@@ -171,6 +195,13 @@ public class Actor {
         }
     }
 
+    /**
+     * @param actors
+     * @param n
+     * @param sortType
+     * @param shows
+     * @return
+     */
     public static String getQueryAverage(final ArrayList<Actor> actors,
                                          final int n, final String sortType,
                                          final ArrayList<Show> shows) {

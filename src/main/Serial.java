@@ -3,23 +3,20 @@ package main;
 import common.Constants;
 import entertainment.Season;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Collections;
+import java.util.List;
 
 public class Serial extends Show {
     private final int numberOfSeasons;
     private final ArrayList<Season> seasons;
     private Map<User, ArrayList<Integer>> userEvidence;
-    private LinkedHashMap<Integer, ArrayList<Double>> gradeSeasons; // pt fiecare sezon avem suma, nr de ratinguri primite, media
+    // pt fiecare sezon avem suma, nr de ratinguri primite, media
+    private LinkedHashMap<Integer, ArrayList<Double>> gradeSeasons;
     private Double average;
-
-    @Override
-    public String toString() {
-        return "Serial{" +
-                "numberOfSeasons=" + numberOfSeasons +
-                ", seasons=" + seasons +
-                ", userEvidence=" + userEvidence +
-                '}';
-    }
 
     public Serial(final String title, final ArrayList<String> cast, final ArrayList<String> genres,
                   final int numberOfSeasons, final ArrayList<Season> seasons, final int year) {
@@ -38,32 +35,40 @@ public class Serial extends Show {
         average = 0.0;
     }
 
-    public void setUserEvidence(Map<User, ArrayList<Integer>> userEvidence) {
+    public final void setUserEvidence(final Map<User, ArrayList<Integer>> userEvidence) {
         this.userEvidence = userEvidence;
     }
 
     @Override
-    public Double Average() {
+    public final Double Average() {
         return this.average;
     }
 
-    public void setAverage(Double average) {
+    public final void setAverage(final Double average) {
         this.average = average;
     }
 
-    public Map<User, ArrayList<Integer>> getUserEvidence() {
+    public final Map<User, ArrayList<Integer>> getUserEvidence() {
         return userEvidence;
     }
 
-    public int getNumberOfSeasons() {
+    public final int getNumberOfSeasons() {
         return numberOfSeasons;
     }
 
-    public ArrayList<Season> getSeasons() {
+    public final ArrayList<Season> getSeasons() {
         return seasons;
     }
 
-    public String getRating(String title, Double grade, User user, int season) {
+    /**
+     * @param title
+     * @param grade
+     * @param user
+     * @param season
+     * @return
+     */
+    public String getRating(final String title, final Double grade,
+                            final User user, final int season) {
         if (this.userEvidence.containsKey(user)) {
             if (this.userEvidence.get(user).contains(season)) {
                 return Constants.ERROR + title + Constants.HAS_BEEN_RATED;
@@ -78,10 +83,10 @@ public class Serial extends Show {
                 for (int i = 1; i < gradeSeasons.size() + 1; i++) {
                     sum += gradeSeasons.get(i).get(0);
                 }
-                Double average = sum / gradeSeasons.size();
-                this.setAverage(average);
+                this.setAverage(sum / gradeSeasons.size());
                 user.setNrRatings(user.getNrRatings() + 1);
-                return Constants.SUCCESS + title + Constants.WAS_RATED + grade + Constants.BY + user.getUsername();
+                return Constants.SUCCESS + title + Constants.WAS_RATED
+                        + grade + Constants.BY + user.getUsername();
             }
         } else {
             if (user.getHistory().containsKey(title)) {
@@ -97,23 +102,33 @@ public class Serial extends Show {
                 for (int i = 1; i < gradeSeasons.size() + 1; i++) {
                     sum += gradeSeasons.get(i).get(0);
                 }
-                Double average = sum / gradeSeasons.size();
-                this.setAverage(average);
+                this.setAverage(sum / gradeSeasons.size());
                 user.setNrRatings(user.getNrRatings() + 1);
-                return Constants.SUCCESS + title + Constants.WAS_RATED + grade + Constants.BY + user.getUsername();
+                return Constants.SUCCESS + title + Constants.WAS_RATED
+                        + grade + Constants.BY + user.getUsername();
             } else {
                 return Constants.ERROR + title + Constants.NOT_SEEN;
             }
         }
     }
 
-    public static ArrayList<String> getResult(LinkedHashMap<String, Integer> serialsLinkedHashMap, String sortType, int n) {
-        List<Map.Entry<String, Integer>> serialsSorted = new ArrayList<Map.Entry<String, Integer>>(serialsLinkedHashMap.entrySet());
+    /**
+     * @param serialsLinkedHashMap
+     * @param sortType
+     * @param n
+     * @return
+     */
+    private static ArrayList<String> getResult(final LinkedHashMap<String, Integer>
+                                                      serialsLinkedHashMap,
+                                              final String sortType, final int n) {
+        List<Map.Entry<String, Integer>> serialsSorted
+                = new ArrayList<Map.Entry<String, Integer>>(serialsLinkedHashMap.entrySet());
         ArrayList<String> serialsNames = new ArrayList<String>();
 
         Collections.sort(serialsSorted, new Comparator<Map.Entry<String, Integer>>() {
             @Override
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+            public int compare(final Map.Entry<String, Integer> o1,
+                               final Map.Entry<String, Integer> o2) {
                 if (o1.getValue() == o2.getValue()) {
                     return o1.getKey().compareTo(o2.getKey());
                 } else {
@@ -122,7 +137,7 @@ public class Serial extends Show {
             }
         });
 
-        if (sortType.equals("desc")) {
+        if (sortType.equals(Constants.DESC)) {
             Collections.reverse(serialsSorted);
         }
 
@@ -139,40 +154,25 @@ public class Serial extends Show {
         }
     }
 
-    public static String getSortedSerials(ArrayList<Serial> serials, ArrayList<User> users,
-                                          int n, String sortType) {
-        LinkedHashMap<String, Integer> serialsLinkedHashMap = new LinkedHashMap<String, Integer>();
-        ArrayList<String> serialsNames = new ArrayList<String>();
-
-        for (User user : users) {
-            for (Serial serial : serials) {
-                if (user.getHistory().containsKey(serial.getTitle())) {
-                    if (serialsLinkedHashMap.containsKey(serial.getTitle())) {
-                        serialsLinkedHashMap.put(serial.getTitle(), serialsLinkedHashMap.get(serial.getTitle())
-                                + user.getHistory().get(serial.getTitle()));
-                    } else {
-                        serialsLinkedHashMap.put(serial.getTitle(), user.getHistory().get(serial.getTitle()));
-                    }
-                }
-            }
-        }
-
-        serialsNames = getResult(serialsLinkedHashMap, sortType, n);
-
-        return Constants.QUERY_RESULT + serialsNames.toString();
-    }
-
-    public int getDuration(Serial s1) {
+    /**
+     *
+     * @param serial
+     * @return
+     */
+    private static int getDuration(final Serial serial) {
         int duration = 0;
-        for (int i = 0; i < s1.getNumberOfSeasons(); i++) {
-            duration += s1.getSeasons().get(i).getDuration();
+        for (int i = 0; i < serial.getNumberOfSeasons(); i++) {
+            duration += serial.getSeasons().get(i).getDuration();
         }
         return duration;
     }
 
-    public static Comparator<Serial> getLongestSerialList() {
+    /**
+     * @return
+     */
+    private static Comparator<Serial> getLongestSerialList() {
         return new Comparator<Serial>() {
-            public int compare(Serial s1, Serial s2) {
+            public int compare(final Serial s1, final Serial s2) {
                 if (s1.getDuration(s1) == s2.getDuration(s2)) {
                     return s1.getTitle().compareTo(s2.getTitle());
                 } else {
@@ -182,13 +182,19 @@ public class Serial extends Show {
         };
     }
 
-    public static String getLongestSerials(ArrayList<Serial> serials, int n, String sortType) {
+    /**
+     * @param serials
+     * @param n
+     * @param sortType
+     * @return
+     */
+    public static String getLongestSerials(final ArrayList<Serial> serials,
+                                           final int n, final String sortType) {
         ArrayList<String> serialsNames = new ArrayList<String>();
 
-        if (sortType.equals("asc")) {
-            serials.sort(Serial.getLongestSerialList());
-        } else {
-            serials.sort(Serial.getLongestSerialList());
+        serials.sort(Serial.getLongestSerialList());
+
+        if (sortType.equals(Constants.DESC)) {
             Collections.reverse(serials);
         }
 
@@ -204,7 +210,16 @@ public class Serial extends Show {
         return Constants.QUERY_RESULT + serialsNames.toString();
     }
 
-    public static String getFavoriteSerials(ArrayList<Serial> serials, ArrayList<User> users, int n, String sortType) {
+    /**
+     * @param serials
+     * @param users
+     * @param n
+     * @param sortType
+     * @return
+     */
+    public static String getFavoriteSerials(final ArrayList<Serial> serials,
+                                            final ArrayList<User> users,
+                                            final int n, final String sortType) {
         ArrayList<String> serialsNames = new ArrayList<>();
         LinkedHashMap<String, Integer> serialsFavourite = new LinkedHashMap<String, Integer>();
 
@@ -212,7 +227,8 @@ public class Serial extends Show {
             for (User user : users) {
                 if (user.getFavoriteShows().contains(serials.get(i).getTitle())) {
                     if (serialsFavourite.containsKey(serials.get(i).getTitle())) {
-                        serialsFavourite.put(serials.get(i).getTitle(), serialsFavourite.get(serials.get(i).getTitle()) + 1);
+                        serialsFavourite.put(serials.get(i).getTitle(),
+                                serialsFavourite.get(serials.get(i).getTitle()) + 1);
                     } else {
                         serialsFavourite.put(serials.get(i).getTitle(), 1);
                     }
@@ -225,20 +241,30 @@ public class Serial extends Show {
         return Constants.QUERY_RESULT + serialsNames.toString();
     }
 
-    public static ArrayList<String> getResultRatingSerial(LinkedHashMap<String, Double> serialsLinkedHashMap, String sortType, int n) {
-        List<Map.Entry<String, Double>> serialsSorted = new ArrayList<Map.Entry<String, Double>>(serialsLinkedHashMap.entrySet());
+    /**
+     * @param serialsLinkedHashMap
+     * @param sortType
+     * @param n
+     * @return
+     */
+    private static ArrayList<String> getResultRatingSerial(
+            final LinkedHashMap<String, Double> serialsLinkedHashMap,
+            final String sortType, final int n) {
+        List<Map.Entry<String, Double>> serialsSorted
+                = new ArrayList<Map.Entry<String, Double>>(serialsLinkedHashMap.entrySet());
 
         Collections.sort(serialsSorted, new Comparator<Map.Entry<String, Double>>() {
-            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+            public int compare(final Map.Entry<String, Double> o1,
+                               final Map.Entry<String, Double> o2) {
                 if (o1.getValue().equals(o2.getValue())) {
                     return (o1.getKey().compareTo(o2.getKey()));
                 } else {
-                    return (int) ((o1.getValue() - o2.getValue()) * 100);
+                    return (int) ((o1.getValue() - o2.getValue()) * Constants.ONE_HUNDRED);
                 }
             }
         });
 
-        if (sortType.equals("desc")) {
+        if (sortType.equals(Constants.DESC)) {
             Collections.reverse(serialsSorted);
         }
 
@@ -257,7 +283,15 @@ public class Serial extends Show {
         }
     }
 
-    public static String getRatingSerials(ArrayList<Serial> serials, int n, String sortType) {
+    /**
+     * @param serials
+     * @param n
+     * @param sortType
+     * @return
+     */
+    public static String getRatingSerials(
+            final ArrayList<Serial> serials,
+                                          final int n, final String sortType) {
         ArrayList<String> serialsNames = new ArrayList<String>();
 
         LinkedHashMap<String, Double> serialsRated = new LinkedHashMap<String, Double>();

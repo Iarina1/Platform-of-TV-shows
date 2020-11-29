@@ -1,27 +1,18 @@
 package main;
 
 import common.Constants;
-//import fileio.ShowInput;
-//import org.w3c.dom.ls.LSOutput;
-
-//import javax.swing.plaf.synth.SynthOptionPaneUI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Collections;
+import java.util.List;
 
 public class Movie extends Show {
     private final int duration;
     private ArrayList<String> userArrayList;
     private Double sum;
     private Double average;
-
-    @Override
-    public String toString() {
-        return "MovieInputData{" + "title= "
-                + super.getTitle() + "year= "
-                + super.getYear() + "duration= "
-                + duration + "cast {"
-                + super.getCast() + " }\n"
-                + "genres {" + super.getGenres() + " }\n ";
-    }
 
     public Movie(final String title, final ArrayList<String> cast, final ArrayList<String> genres,
                  final int year, final int duration) {
@@ -32,36 +23,43 @@ public class Movie extends Show {
         this.average = 0.0;
     }
 
-    public ArrayList<String> getUserArrayList() {
+    public final ArrayList<String> getUserArrayList() {
         return userArrayList;
     }
 
-    public void setUserArrayList(ArrayList<String> userArrayList) {
+    public final void setUserArrayList(final ArrayList<String> userArrayList) {
         this.userArrayList = userArrayList;
     }
 
-    public void setSum(Double sum) {
+    public final void setSum(final Double sum) {
         this.sum = sum;
     }
 
-    public void setAverage(Double average) {
+    public final void setAverage(final Double average) {
         this.average = average;
     }
 
-    public Double getSum() {
+    public final Double getSum() {
         return sum;
     }
 
     @Override
-    public Double Average() {
+    public final Double Average() {
         return this.average;
     }
 
-    public int getDuration() {
+    public final int getDuration() {
         return duration;
     }
 
-    public String getRating(String title, Double grade, User user) {
+    /**
+     * @param title
+     * @param grade
+     * @param user
+     * @return
+     */
+    public final String getRating(final String title,
+                                  final Double grade, final User user) {
         if (this.userArrayList.contains(user.getUsername())) {
             return Constants.ERROR + title + Constants.HAS_BEEN_RATED;
         } else if (!user.getHistory().containsKey(title)) {
@@ -71,17 +69,28 @@ public class Movie extends Show {
             this.sum += grade;
             this.average = this.sum / userArrayList.size();
             user.setNrRatings(user.getNrRatings() + 1);
-            return Constants.SUCCESS + title + Constants.WAS_RATED + grade + Constants.BY + user.getUsername();
+            return Constants.SUCCESS + title + Constants.WAS_RATED + grade + Constants.BY
+                    + user.getUsername();
         }
     }
 
-    public static ArrayList<String> getResult(LinkedHashMap<String, Integer> moviesLinkedHashMap, String sortType, int n) {
+    /**
+     * @param moviesLinkedHashMap
+     * @param sortType
+     * @param n
+     * @return
+     */
+    private static ArrayList<String> getResult(final LinkedHashMap<String, Integer>
+                                                      moviesLinkedHashMap, final String sortType,
+                                              final int n) {
         ArrayList<String> moviesNames = new ArrayList<String>();
-        List<Map.Entry<String, Integer>> moviesSorted = new ArrayList<Map.Entry<String, Integer>>(moviesLinkedHashMap.entrySet());
+        List<Map.Entry<String, Integer>> moviesSorted
+                = new ArrayList<Map.Entry<String, Integer>>(moviesLinkedHashMap.entrySet());
 
         Collections.sort(moviesSorted, new Comparator<Map.Entry<String, Integer>>() {
             @Override
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+            public int compare(final Map.Entry<String, Integer> o1,
+                               final Map.Entry<String, Integer> o2) {
                 if (o1.getValue() == o2.getValue()) {
                     return o1.getKey().compareTo(o2.getKey());
                 } else {
@@ -90,7 +99,7 @@ public class Movie extends Show {
             }
         });
 
-        if (sortType.equals("desc")) {
+        if (sortType.equals(Constants.DESC)) {
             Collections.reverse(moviesSorted);
         }
 
@@ -107,31 +116,13 @@ public class Movie extends Show {
         }
     }
 
-    public static String getSortedMovies(ArrayList<Movie> movies, ArrayList<User> users, int n, String sortType) {
-        LinkedHashMap<String, Integer> moviesLinkedHashMap = new LinkedHashMap<String, Integer>();
-        ArrayList<String> moviesNames = new ArrayList<String>();
-
-        for (User user : users) {
-            for (Movie movie : movies) {
-                if (user.getHistory().containsKey(movie.getTitle())) {
-                    if (moviesLinkedHashMap.containsKey(movie.getTitle())) {
-                        moviesLinkedHashMap.put(movie.getTitle(), moviesLinkedHashMap.get(movie.getTitle())
-                                + user.getHistory().get(movie.getTitle()));
-                    } else {
-                        moviesLinkedHashMap.put(movie.getTitle(), user.getHistory().get(movie.getTitle()));
-                    }
-                }
-            }
-        }
-
-        moviesNames = getResult(moviesLinkedHashMap, sortType, n);
-
-        return Constants.QUERY_RESULT + moviesNames.toString();
-    }
-
-    public static Comparator<Movie> getMovieListSortedByDuration() {
+    /**
+     *
+     * @return
+     */
+    private static Comparator<Movie> getLongestMovieList() {
         return new Comparator<Movie>() {
-            public int compare(Movie m1, Movie m2) {
+            public int compare(final Movie m1, final Movie m2) {
                 if (m1.getDuration() == m2.getDuration()) {
                     return m1.getTitle().compareTo(m2.getTitle());
                 } else {
@@ -141,12 +132,19 @@ public class Movie extends Show {
         };
     }
 
-    public static String getLongestMovies(ArrayList<Movie> movies, int n, String sortType) {
+    /**
+     * @param movies
+     * @param n
+     * @param sortType
+     * @return
+     */
+    public static String getLongestMovies(final ArrayList<Movie> movies,
+                                          final int n, final String sortType) {
         ArrayList<String> moviesNames = new ArrayList<String>();
 
-        movies.sort(Movie.getMovieListSortedByDuration());
+        movies.sort(Movie.getLongestMovieList());
 
-        if (sortType.equals("desc")) {
+        if (sortType.equals(Constants.DESC)) {
             Collections.reverse(movies);
         }
 
@@ -162,7 +160,16 @@ public class Movie extends Show {
         return Constants.QUERY_RESULT + moviesNames.toString();
     }
 
-    public static String getFavoriteMovies(ArrayList<Movie> movies, ArrayList<User> users, int n, String sortType) {
+    /**
+     * @param movies
+     * @param users
+     * @param n
+     * @param sortType
+     * @return
+     */
+    public static String getFavoriteMovies(final ArrayList<Movie> movies,
+                                           final ArrayList<User> users,
+                                           final int n, final String sortType) {
         ArrayList<String> moviesNames = new ArrayList<>();
         LinkedHashMap<String, Integer> moviesFavourite = new LinkedHashMap<String, Integer>();
 
@@ -170,7 +177,8 @@ public class Movie extends Show {
             for (User user : users) {
                 if (user.getFavoriteShows().contains(movies.get(i).getTitle())) {
                     if (moviesFavourite.containsKey(movies.get(i).getTitle())) {
-                        moviesFavourite.put(movies.get(i).getTitle(), moviesFavourite.get(movies.get(i).getTitle()) + 1);
+                        moviesFavourite.put(movies.get(i).getTitle(),
+                                moviesFavourite.get(movies.get(i).getTitle()) + 1);
                     } else {
                         moviesFavourite.put(movies.get(i).getTitle(), 1);
                     }
@@ -183,21 +191,31 @@ public class Movie extends Show {
         return Constants.QUERY_RESULT + moviesNames.toString();
     }
 
-    public static ArrayList<String> getResultRating(LinkedHashMap<String, Double> moviesLinkedHashMap, String sortType, int n) {
-        List<Map.Entry<String, Double>> moviesSorted = new ArrayList<Map.Entry<String, Double>>(moviesLinkedHashMap.entrySet());
+    /**
+     * @param moviesLinkedHashMap
+     * @param sortType
+     * @param n
+     * @return
+     */
+    private static ArrayList<String> getResultRatingMovies(
+            final LinkedHashMap<String, Double> moviesLinkedHashMap,
+                                                          final String sortType, final int n) {
+        List<Map.Entry<String, Double>> moviesSorted
+                = new ArrayList<Map.Entry<String, Double>>(moviesLinkedHashMap.entrySet());
         ArrayList<String> moviesNames = new ArrayList<String>();
 
         Collections.sort(moviesSorted, new Comparator<Map.Entry<String, Double>>() {
-            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+            public int compare(final Map.Entry<String, Double> o1,
+                               final Map.Entry<String, Double> o2) {
                 if (o1.getValue().equals(o2.getValue())) {
                     return (o1.getKey().compareTo(o2.getKey()));
                 } else {
-                    return (int) ((o1.getValue() - o2.getValue()) * 100);
+                    return (int) ((o1.getValue() - o2.getValue()) * Constants.ONE_HUNDRED);
                 }
             }
         });
 
-        if (sortType.equals("desc")) {
+        if (sortType.equals(Constants.DESC)) {
             Collections.reverse(moviesSorted);
         }
 
@@ -214,7 +232,14 @@ public class Movie extends Show {
         }
     }
 
-    public static String getRatingMovies(ArrayList<Movie> movies, int n, String sortType) {
+    /**
+     * @param movies
+     * @param n
+     * @param sortType
+     * @return
+     */
+    public static String getRatingMovies(final ArrayList<Movie> movies,
+                                         final int n, final String sortType) {
         ArrayList<String> moviesNames = new ArrayList<String>();
 
         LinkedHashMap<String, Double> moviesRated = new LinkedHashMap<String, Double>();
@@ -225,7 +250,7 @@ public class Movie extends Show {
             }
         }
 
-        moviesNames = getResultRating(moviesRated, sortType, n);
+        moviesNames = getResultRatingMovies(moviesRated, sortType, n);
         return Constants.QUERY_RESULT + moviesNames;
     }
 }
