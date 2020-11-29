@@ -30,9 +30,9 @@ public class Serial extends Show {
         gradeSeasons = new LinkedHashMap<Integer, ArrayList<Double>>();
         for (int i = 1; i < numberOfSeasons + 1; i++) {
             ArrayList<Double> newGrades = new ArrayList<>();
-            newGrades.add((double)0);
-            newGrades.add((double)0);
-            newGrades.add((double)0);
+            newGrades.add((double) 0);
+            newGrades.add((double) 0);
+            newGrades.add((double) 0);
             gradeSeasons.put(i, newGrades);
         }
         average = 0.0;
@@ -46,6 +46,7 @@ public class Serial extends Show {
     public Double Average() {
         return this.average;
     }
+
     public void setAverage(Double average) {
         this.average = average;
     }
@@ -53,9 +54,11 @@ public class Serial extends Show {
     public Map<User, ArrayList<Integer>> getUserEvidence() {
         return userEvidence;
     }
+
     public int getNumberOfSeasons() {
         return numberOfSeasons;
     }
+
     public ArrayList<Season> getSeasons() {
         return seasons;
     }
@@ -71,12 +74,6 @@ public class Serial extends Show {
                 newGrades.add(gradeSeasons.get(season).get(1) + 1);
                 newGrades.add(newGrades.get(0) / newGrades.get(1));
                 gradeSeasons.put(season, newGrades);
-//                if (title.equals("Killing Eve")) {
-//                    for (int i = 1; i < gradeSeasons.size() + 1; i++) {
-//                        System.out.println(i + " " + gradeSeasons.get(i).get(0) + " " + gradeSeasons.get(i).get(1) + " " + gradeSeasons.get(i).get(2));
-//                    }
-//                    System.out.println();
-//                }
                 Double sum = 0.0;
                 for (int i = 1; i < gradeSeasons.size() + 1; i++) {
                     sum += gradeSeasons.get(i).get(0);
@@ -96,12 +93,6 @@ public class Serial extends Show {
                 newGrades.add(gradeSeasons.get(season).get(1) + 1);
                 newGrades.add(newGrades.get(0) / newGrades.get(1));
                 gradeSeasons.put(season, newGrades);
-//                if (title.equals("Killing Eve")) {
-//                    for (int i = 1; i < gradeSeasons.size() + 1; i++) {
-//                        System.out.println(i + " " + gradeSeasons.get(i).get(0) + " " + gradeSeasons.get(i).get(1) + " " + gradeSeasons.get(i).get(2));
-//                    }
-//                    System.out.println();
-//                }
                 Double sum = 0.0;
                 for (int i = 1; i < gradeSeasons.size() + 1; i++) {
                     sum += gradeSeasons.get(i).get(0);
@@ -118,7 +109,7 @@ public class Serial extends Show {
 
     public static ArrayList<String> getResult(LinkedHashMap<String, Integer> serialsLinkedHashMap, String sortType, int n) {
         List<Map.Entry<String, Integer>> serialsSorted = new ArrayList<Map.Entry<String, Integer>>(serialsLinkedHashMap.entrySet());
-        ArrayList<String> serialsNames = new ArrayList<String >();
+        ArrayList<String> serialsNames = new ArrayList<String>();
 
         Collections.sort(serialsSorted, new Comparator<Map.Entry<String, Integer>>() {
             @Override
@@ -151,7 +142,7 @@ public class Serial extends Show {
     public static String getSortedSerials(ArrayList<Serial> serials, ArrayList<User> users,
                                           int n, String sortType) {
         LinkedHashMap<String, Integer> serialsLinkedHashMap = new LinkedHashMap<String, Integer>();
-        ArrayList<String> serialsNames = new ArrayList<String >();
+        ArrayList<String> serialsNames = new ArrayList<String>();
 
         for (User user : users) {
             for (Serial serial : serials) {
@@ -192,7 +183,7 @@ public class Serial extends Show {
     }
 
     public static String getLongestSerials(ArrayList<Serial> serials, int n, String sortType) {
-        ArrayList<String> serialsNames = new ArrayList<String >();
+        ArrayList<String> serialsNames = new ArrayList<String>();
 
         if (sortType.equals("asc")) {
             serials.sort(Serial.getLongestSerialList());
@@ -242,7 +233,7 @@ public class Serial extends Show {
                 if (o1.getValue().equals(o2.getValue())) {
                     return (o1.getKey().compareTo(o2.getKey()));
                 } else {
-                    return (int)((o1.getValue() - o2.getValue()) * 100);
+                    return (int) ((o1.getValue() - o2.getValue()) * 100);
                 }
             }
         });
@@ -251,7 +242,7 @@ public class Serial extends Show {
             Collections.reverse(serialsSorted);
         }
 
-        ArrayList<String> serilasNames = new ArrayList<String >();
+        ArrayList<String> serilasNames = new ArrayList<String>();
 
         if (serialsSorted.size() < n) {
             for (int i = 0; i < serialsSorted.size(); i++) {
@@ -271,8 +262,8 @@ public class Serial extends Show {
 
         LinkedHashMap<String, Double> serialsRated = new LinkedHashMap<String, Double>();
 
-        for (Serial serial :  serials) {
-            if(!serialsRated.containsKey(serial.getTitle()) && serial.Average() != 0) {
+        for (Serial serial : serials) {
+            if (!serialsRated.containsKey(serial.getTitle()) && serial.Average() != 0) {
                 serialsRated.put(serial.getTitle(), serial.Average());
             }
         }

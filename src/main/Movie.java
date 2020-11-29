@@ -1,10 +1,10 @@
 package main;
 
 import common.Constants;
-import fileio.ShowInput;
-import org.w3c.dom.ls.LSOutput;
+//import fileio.ShowInput;
+//import org.w3c.dom.ls.LSOutput;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
+//import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.*;
 
 public class Movie extends Show {
@@ -35,15 +35,19 @@ public class Movie extends Show {
     public ArrayList<String> getUserArrayList() {
         return userArrayList;
     }
+
     public void setUserArrayList(ArrayList<String> userArrayList) {
         this.userArrayList = userArrayList;
     }
+
     public void setSum(Double sum) {
         this.sum = sum;
     }
+
     public void setAverage(Double average) {
         this.average = average;
     }
+
     public Double getSum() {
         return sum;
     }
@@ -52,6 +56,7 @@ public class Movie extends Show {
     public Double Average() {
         return this.average;
     }
+
     public int getDuration() {
         return duration;
     }
@@ -71,7 +76,7 @@ public class Movie extends Show {
     }
 
     public static ArrayList<String> getResult(LinkedHashMap<String, Integer> moviesLinkedHashMap, String sortType, int n) {
-        ArrayList<String> moviesNames = new ArrayList<String >();
+        ArrayList<String> moviesNames = new ArrayList<String>();
         List<Map.Entry<String, Integer>> moviesSorted = new ArrayList<Map.Entry<String, Integer>>(moviesLinkedHashMap.entrySet());
 
         Collections.sort(moviesSorted, new Comparator<Map.Entry<String, Integer>>() {
@@ -104,7 +109,7 @@ public class Movie extends Show {
 
     public static String getSortedMovies(ArrayList<Movie> movies, ArrayList<User> users, int n, String sortType) {
         LinkedHashMap<String, Integer> moviesLinkedHashMap = new LinkedHashMap<String, Integer>();
-        ArrayList<String> moviesNames = new ArrayList<String >();
+        ArrayList<String> moviesNames = new ArrayList<String>();
 
         for (User user : users) {
             for (Movie movie : movies) {
@@ -137,7 +142,7 @@ public class Movie extends Show {
     }
 
     public static String getLongestMovies(ArrayList<Movie> movies, int n, String sortType) {
-        ArrayList<String> moviesNames = new ArrayList<String >();
+        ArrayList<String> moviesNames = new ArrayList<String>();
 
         movies.sort(Movie.getMovieListSortedByDuration());
 
@@ -180,14 +185,14 @@ public class Movie extends Show {
 
     public static ArrayList<String> getResultRating(LinkedHashMap<String, Double> moviesLinkedHashMap, String sortType, int n) {
         List<Map.Entry<String, Double>> moviesSorted = new ArrayList<Map.Entry<String, Double>>(moviesLinkedHashMap.entrySet());
-        ArrayList<String> moviesNames = new ArrayList<String >();
+        ArrayList<String> moviesNames = new ArrayList<String>();
 
         Collections.sort(moviesSorted, new Comparator<Map.Entry<String, Double>>() {
             public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
                 if (o1.getValue().equals(o2.getValue())) {
                     return (o1.getKey().compareTo(o2.getKey()));
                 } else {
-                    return (int)((o1.getValue() - o2.getValue()) * 100);
+                    return (int) ((o1.getValue() - o2.getValue()) * 100);
                 }
             }
         });
@@ -214,8 +219,8 @@ public class Movie extends Show {
 
         LinkedHashMap<String, Double> moviesRated = new LinkedHashMap<String, Double>();
 
-        for (Movie movie :  movies) {
-            if(!moviesRated.containsKey(movie.getTitle()) && movie.Average() != 0) {
+        for (Movie movie : movies) {
+            if (!moviesRated.containsKey(movie.getTitle()) && movie.Average() != 0) {
                 moviesRated.put(movie.getTitle(), movie.Average());
             }
         }

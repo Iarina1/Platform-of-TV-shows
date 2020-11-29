@@ -12,18 +12,9 @@ public class Actor {
     private ArrayList<String> filmography;
     private Map<ActorsAwards, Integer> awards;
 
-    @Override
-    public String toString() {
-        return "Actor{" +
-                "name='" + name + '\'' +
-                ", careerDescription='"
-                + careerDescription + '\'' +
-                ", filmography=" + filmography +
-//                ", awards=" + awards +
-                '}';
-    }
-
-    public Actor(String name, String careerDescription, ArrayList<String> filmography, Map<ActorsAwards, Integer> awards) {
+    public Actor(final String name, final String careerDescription,
+                 final ArrayList<String> filmography,
+                 final Map<ActorsAwards, Integer> awards) {
         this.name = name;
         this.careerDescription = careerDescription;
         this.filmography = filmography;
@@ -33,39 +24,40 @@ public class Actor {
         }
     }
 
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public final void setName(final String name) {
         this.name = name;
     }
 
-    public String getCareerDescription() {
+    public final String getCareerDescription() {
         return careerDescription;
     }
 
-    public void setCareerDescription(String careerDescription) {
+    public final void setCareerDescription(final String careerDescription) {
         this.careerDescription = careerDescription;
     }
 
-    public ArrayList<String> getFilmography() {
+    public final ArrayList<String> getFilmography() {
         return filmography;
     }
 
-    public void setFilmography(ArrayList<String> filmography) {
+    public final void setFilmography(final ArrayList<String> filmography) {
         this.filmography = filmography;
     }
 
-    public Map<ActorsAwards, Integer> getAwards() {
+    public final Map<ActorsAwards, Integer> getAwards() {
         return awards;
     }
 
-    public void setAwards(Map<ActorsAwards, Integer> awards) {
+    public final void setAwards(final Map<ActorsAwards, Integer> awards) {
         this.awards = awards;
     }
 
-    public static String getFilterDescription(ArrayList<Actor> actors, List<String> filters, String sortType) {
+    public static String getFilterDescription(final ArrayList<Actor> actors,
+                                              final List<String> filters, final String sortType) {
         ArrayList<String> actorsNames = new ArrayList<String>();
         for (Actor actor : actors) {
             actorsNames.add(actor.getName());
@@ -74,7 +66,8 @@ public class Actor {
             int isGood = 1;
             String[] actorDescription;
             actorDescription = actor.getCareerDescription().toLowerCase().split("[^a-zA-Z]");
-            ArrayList<String> actorDescriptionArrayList = new ArrayList<>(Arrays.asList(actorDescription));
+            ArrayList<String> actorDescriptionArrayList
+                    = new ArrayList<>(Arrays.asList(actorDescription));
             for (String filter : filters) {
                 if (!actorDescriptionArrayList.contains(filter)) {
                     isGood = 0;
@@ -93,7 +86,8 @@ public class Actor {
         return Constants.QUERY_RESULT + actorsNames.toString();
     }
 
-    public static String getQueryAwards(ArrayList<Actor> actors, List<String> awards, String sortType) {
+    public static String getQueryAwards(final ArrayList<Actor> actors,
+                                        final List<String> awards, final String sortType) {
         LinkedHashMap<String, Integer> actorsAwards = new LinkedHashMap<>();
 
         for (Actor actor : actors) {
@@ -114,11 +108,13 @@ public class Actor {
             }
         }
 
-        List<Map.Entry<String, Integer>> actorsSorted = new ArrayList<Map.Entry<String, Integer>>(actorsAwards.entrySet());
+        List<Map.Entry<String, Integer>> actorsSorted
+                = new ArrayList<Map.Entry<String, Integer>>(actorsAwards.entrySet());
 
         Collections.sort(actorsSorted, new Comparator<Map.Entry<String, Integer>>() {
             @Override
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+            public int compare(final Map.Entry<String, Integer> o1,
+                               final Map.Entry<String, Integer> o2) {
                 if (o1.getValue().equals(o2.getValue())) {
                     return o1.getKey().compareTo(o2.getKey());
                 } else {
@@ -140,16 +136,20 @@ public class Actor {
         return Constants.QUERY_RESULT + actorsName.toString();
     }
 
-    public static ArrayList<String> getResultAverage(LinkedHashMap<String, Double> actorsLinkedHashMap, String sortType, int n) {
-        List<Map.Entry<String, Double>> actorsSorted = new ArrayList<Map.Entry<String, Double>>(actorsLinkedHashMap.entrySet());
-        ArrayList<String> actorsNames = new ArrayList<String >();
+    public static ArrayList<String> getResultAverage(
+            final LinkedHashMap<String, Double> actorsLinkedHashMap,
+            final String sortType, final int n) {
+        List<Map.Entry<String, Double>> actorsSorted
+                = new ArrayList<Map.Entry<String, Double>>(actorsLinkedHashMap.entrySet());
+        ArrayList<String> actorsNames = new ArrayList<String>();
 
         Collections.sort(actorsSorted, new Comparator<Map.Entry<String, Double>>() {
-            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+            public int compare(final Map.Entry<String, Double> o1,
+                               final Map.Entry<String, Double> o2) {
                 if (o1.getValue().equals(o2.getValue())) {
                     return (o1.getKey().compareTo(o2.getKey()));
                 } else {
-                    return (int)((o1.getValue() - o2.getValue()) * 100);
+                    return (int) ((o1.getValue() - o2.getValue()) * Constants.ONE_HUNDRED);
                 }
             }
         });
@@ -171,8 +171,9 @@ public class Actor {
         }
     }
 
-
-    public static String getQueryAverage(ArrayList<Actor> actors, int n, String sortType, ArrayList<Show> shows) {
+    public static String getQueryAverage(final ArrayList<Actor> actors,
+                                         final int n, final String sortType,
+                                         final ArrayList<Show> shows) {
         LinkedHashMap<String, Double> actorsAverage = new LinkedHashMap<>();
         ArrayList<String> actorsNames = new ArrayList<>();
         for (Actor actor : actors) {
@@ -180,7 +181,8 @@ public class Actor {
             int nr = 0;
             for (int i = 0; i < actor.getFilmography().size(); i++) {
                 for (Show show : shows) {
-                    if (show.getTitle().equals(actor.getFilmography().get(i)) && (show.Average() != 0)) {
+                    if (show.getTitle().equals(actor.getFilmography().get(i))
+                            && (show.Average() != 0)) {
                         sum += show.Average();
                         nr++;
                     }
@@ -193,7 +195,9 @@ public class Actor {
             actorsAverage.put(actor.getName(), average);
         }
 
-        while(actorsAverage.values().remove(0.0));
+        while (actorsAverage.values().remove(0.0)) {
+            continue;
+        }
 
         actorsNames = getResultAverage(actorsAverage, sortType, n);
         return Constants.QUERY_RESULT + actorsNames.toString();

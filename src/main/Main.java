@@ -6,9 +6,9 @@ import common.Constants;
 import fileio.*;
 import org.json.simple.JSONArray;
 
-import javax.sound.midi.Soundbank;
-import javax.swing.plaf.ScrollPaneUI;
-import javax.swing.plaf.synth.SynthOptionPaneUI;
+//import javax.sound.midi.Soundbank;
+//import javax.swing.plaf.ScrollPaneUI;
+//import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,6 +29,7 @@ public final class Main {
 
     /**
      * Call the main checker and the coding style checker
+     *
      * @param args from command line
      * @throws IOException in case of exceptions to reading / writing
      */
@@ -151,7 +152,8 @@ public final class Main {
                         }
                     }
                 }
-            } if (input.getCommands().get(i).getActionType().equals(Constants.QUERY)) {
+            }
+            if (input.getCommands().get(i).getActionType().equals(Constants.QUERY)) {
                 if (input.getCommands().get(i).getObjectType().equals(Constants.USERS)) {
                     arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
                             .getActionId(), null, User.getSortedList(usersList,
@@ -174,7 +176,7 @@ public final class Main {
                         arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
                                 .getActionId(), null, Movie.getSortedMovies(moviesListBackup, usersList,
                                 input.getCommands().get(i).getNumber(), input.getCommands().get(i)
-                        .getSortType())));
+                                        .getSortType())));
                     } else if (input.getCommands().get(i).getObjectType().equals(Constants.SHOWS)) {
                         ArrayList<Serial> serialsListBackup = new ArrayList<>(serialsList);
                         for (int j = serialsList.size() - 1; j >= 0; j--) {
@@ -228,7 +230,7 @@ public final class Main {
                         }
                         arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
                                 .getActionId(), null, Serial.getLongestSerials(serialsListBackup, input
-                        .getCommands().get(i).getNumber(), input.getCommands().get(i).getSortType())));
+                                .getCommands().get(i).getNumber(), input.getCommands().get(i).getSortType())));
                     }
                 } else if (input.getCommands().get(i).getCriteria().equals(Constants.FAVORITE)) {
                     if (input.getCommands().get(i).getObjectType().equals(Constants.MOVIES)) {
@@ -307,7 +309,8 @@ public final class Main {
                                 input.getCommands().get(i).getNumber(),
                                 input.getCommands().get(i).getSortType())));
                     }
-                } if (input.getCommands().get(i).getObjectType().equals(Constants.ACTORS)) {
+                }
+                if (input.getCommands().get(i).getObjectType().equals(Constants.ACTORS)) {
                     if (input.getCommands().get(i).getCriteria().equals(Constants.FILTER_DESCRIPTIONS)) {
                         arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
                                 .getActionId(), null, Actor.getFilterDescription(actorList,
@@ -315,34 +318,39 @@ public final class Main {
                                 input.getCommands().get(i).getSortType())));
                     } else if (input.getCommands().get(i).getCriteria().equals(Constants.AWARDS)) {
                         arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
-                                .getActionId(), null, Actor.getQueryAwards( actorList,
+                                .getActionId(), null, Actor.getQueryAwards(actorList,
                                 input.getCommands().get(i).getFilters().get(3), input
-                                .getCommands().get(i).getSortType())));
+                                        .getCommands().get(i).getSortType())));
                     } else if (input.getCommands().get(i).getCriteria().equals(Constants.AVERAGE)) {
                         arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
-                                .getActionId(), null, Actor.getQueryAverage( actorList, input.getCommands()
+                                .getActionId(), null, Actor.getQueryAverage(actorList, input.getCommands()
                                 .get(i).getNumber(), input.getCommands().get(i).getSortType(), showList)));
                     }
                 }
-            } else if(input.getCommands().get(i).getActionType().equals(Constants.RECOMMENDATION)) {
-                if(input.getCommands().get(i).getType().equals(Constants.STANDARD)) {
+            } else if (input.getCommands().get(i).getActionType().equals(Constants.RECOMMENDATION)) {
+                if (input.getCommands().get(i).getType().equals(Constants.STANDARD)) {
                     arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
                             .getActionId(), null, User.RecommendationStandard(usersList, showList,
                             input.getCommands().get(i).getUsername())));
-                } else if(input.getCommands().get(i).getType().equals(Constants.BEST_UNSEEN)) {
+                } else if (input.getCommands().get(i).getType().equals(Constants.BEST_UNSEEN)) {
                     arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
                             .getActionId(), null, User.BestUnseenRecommendation(usersList, showList,
                             input.getCommands().get(i).getUsername())));
-                } else if(input.getCommands().get(i).getType().equals(Constants.SEARCH)) {
+                } else if (input.getCommands().get(i).getType().equals(Constants.SEARCH)) {
 //                    SearchRecommendation(ArrayList<User> users, ArrayList<Show> shows, String username, String genre)
                     arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
                             .getActionId(), null, User.SearchRecommendation(usersList, showList,
                             input.getCommands().get(i).getUsername(), input.getCommands().get(i)
-                    .getGenre())));
-                } else if(input.getCommands().get(i).getType().equals(Constants.FAVORITE)) {
+                                    .getGenre())));
+                } else if (input.getCommands().get(i).getType().equals(Constants.FAVORITE)) {
+
                     arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
-                            .getActionId(), null, User.getFavourite( usersList, showList,
+                            .getActionId(), null, User.getFavourite(usersList, showList,
                             input.getCommands().get(i).getUsername())));
+                } else if (input.getCommands().get(i).getType().equals(Constants.POPULAR)) {
+                    arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
+                            .getActionId(), null, User.getPopularRecommandation(usersList,
+                            showList, input.getCommands().get(i).getUsername())));
                 }
             }
         }

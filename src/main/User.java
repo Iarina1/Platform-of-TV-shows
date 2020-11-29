@@ -1,10 +1,7 @@
 package main;
 
-import com.sun.source.tree.BreakTree;
 import common.Constants;
-import net.sf.json.filters.FalsePropertyFilter;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class User {
@@ -13,16 +10,6 @@ public class User {
     private final Map<String, Integer> history;
     private final ArrayList<String> favoriteShows;
     private int nrRatings;
-
-    @Override
-    public String toString() {
-        return "User{"
-                + "username='" + username + '\''
-                + ", subscriptionType='" + subscriptionType + '\''
-                + ", history=" + history
-                + ", favoriteShows=" + favoriteShows
-                + '}';
-    }
 
     public User(final String username, final String subscriptionType,
                 final Map<String, Integer> history, final ArrayList<String> favoriteShows) {
@@ -39,18 +26,23 @@ public class User {
     public int getNrRatings() {
         return nrRatings;
     }
+
     public void setNrRatings(int nrRatings) {
         this.nrRatings = nrRatings;
     }
+
     public String getUsername() {
         return username;
     }
+
     public String getSubscriptionType() {
         return subscriptionType;
     }
+
     public Map<String, Integer> getHistory() {
         return history;
     }
+
     public ArrayList<String> getFavoriteShows() {
         return favoriteShows;
     }
@@ -93,8 +85,7 @@ public class User {
 
     public static String getSortedList(ArrayList<User> userList, int n, String sortType) {
         ArrayList<User> userRatings = new ArrayList<User>();
-        ArrayList<String> userNames = new ArrayList<String >();
-
+        ArrayList<String> userNames = new ArrayList<String>();
 
         for (User user : userList) {
             if (user.getNrRatings() != 0) {
@@ -102,10 +93,9 @@ public class User {
             }
         }
 
-        if (sortType.equals("asc")) {
-            userRatings.sort(User.getUserRatingsList());
-        } else {
-            userRatings.sort(User.getUserRatingsList());
+        userRatings.sort(User.getUserRatingsList());
+
+        if (sortType.equals("desc")) {
             Collections.reverse(userRatings);
         }
 
@@ -123,10 +113,10 @@ public class User {
     }
 
     public static String RecommendationStandard(ArrayList<User> users, ArrayList<Show> shows, String username) {
-        for(User user : users) {
-            if(user.getUsername().equals(username)) {
-                for(Show show : shows) {
-                    if(!user.getHistory().containsKey(show.getTitle())) {
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                for (Show show : shows) {
+                    if (!user.getHistory().containsKey(show.getTitle())) {
                         return Constants.STANDARD_RESULT + show.getTitle();
                     }
                 }
@@ -137,23 +127,22 @@ public class User {
 
     public static String BestUnseenRecommendation(ArrayList<User> users, ArrayList<Show> shows, String username) {
         LinkedHashMap<String, Double> showsBackup = new LinkedHashMap<>();
-        for(Show show : shows) {
+        for (Show show : shows) {
             showsBackup.put(show.getTitle(), show.Average());
         }
 
         List<Map.Entry<String, Double>> showSorted = new ArrayList<Map.Entry<String, Double>>(showsBackup.entrySet());
-        ArrayList<String> showsNames = new ArrayList<String >();
 
         Collections.sort(showSorted, new Comparator<Map.Entry<String, Double>>() {
             public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-                return (int)((o2.getValue() - o1.getValue()) * 100);
+                return (int) ((o2.getValue() - o1.getValue()) * 100);
             }
         });
 
-        for(User user : users) {
-            if(user.getUsername().equals(username)) {
-                for(int i = 0; i < showSorted.size(); i++) {
-                    if(!user.getHistory().containsKey(showSorted.get(i).getKey())) {
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                for (int i = 0; i < showSorted.size(); i++) {
+                    if (!user.getHistory().containsKey(showSorted.get(i).getKey())) {
                         return Constants.BEST_RESULT + showSorted.get(i).getKey();
                     }
                 }
@@ -164,14 +153,14 @@ public class User {
 
     public static ArrayList<String> getSearchSorted(LinkedHashMap<String, Double> showsLinkedHashMap) {
         List<Map.Entry<String, Double>> showsSorted = new ArrayList<Map.Entry<String, Double>>(showsLinkedHashMap.entrySet());
-        ArrayList<String> showsNames = new ArrayList<String >();
+        ArrayList<String> showsNames = new ArrayList<String>();
 
         Collections.sort(showsSorted, new Comparator<Map.Entry<String, Double>>() {
             public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
                 if (o1.getValue().equals(o2.getValue())) {
                     return (o1.getKey().compareTo(o2.getKey()));
                 } else {
-                    return (int)((o1.getValue() - o2.getValue()) * 100);
+                    return (int) ((o1.getValue() - o2.getValue()) * 100);
                 }
             }
         });
@@ -184,45 +173,52 @@ public class User {
 
     public static String SearchRecommendation(ArrayList<User> users, ArrayList<Show> shows, String username, String genre) {
         LinkedHashMap<String, Double> showsBackup = new LinkedHashMap<>();
-        ArrayList<String> showsNames = new ArrayList<String >();
-        ArrayList<String> showsRecommendation = new ArrayList<String >();
+        ArrayList<String> showsNames = new ArrayList<String>();
+        ArrayList<String> showsRecommendation = new ArrayList<String>();
         int sem = 0;
 
-        for(Show show : shows) {
-            if(show.getGenres().contains(genre)) {
+        for (Show show : shows) {
+            if (show.getGenres().contains(genre)) {
                 showsBackup.put(show.getTitle(), show.Average());
             }
         }
 
-        for(User user : users) {
-            if(user.getUsername().equals(username)) {
-                if(user.getSubscriptionType().equals(Constants.PREMIUM)) {
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                if (user.getSubscriptionType().equals(Constants.PREMIUM)) {
                     showsNames = getSearchSorted(showsBackup);
                     for (int i = 0; i < showsNames.size(); i++) {
-                        if(!user.getHistory().containsKey(showsNames.get(i))) {
+                        if (!user.getHistory().containsKey(showsNames.get(i))) {
                             showsRecommendation.add(showsNames.get(i));
-                            sem  = 1;
+                            sem = 1;
                         }
                     }
                 }
             }
         }
 
-        if(sem == 0) {
+        if (sem == 0) {
             return Constants.SEARCH_NOT_APPLIED;
         } else {
             return Constants.SEARCH_RESULT + showsRecommendation;
         }
     }
 
-    public static ArrayList<String> getFavouriteSorted(LinkedHashMap<String, Integer> showsLinkedHashMap) {
-        ArrayList<String> showsNames = new ArrayList<String >();
-        List<Map.Entry<String, Integer>> showsSorted = new ArrayList<Map.Entry<String, Integer>>(showsLinkedHashMap.entrySet());
+    public static ArrayList<String> getFavouriteSorted(final LinkedHashMap<String, Integer> showsLinkedHashMap,
+                                                       final ArrayList<String> showDB) {
+        ArrayList<String> showsNames = new ArrayList<String>();
+        List<Map.Entry<String, Integer>> showsSorted
+                = new ArrayList<Map.Entry<String, Integer>>(showsLinkedHashMap.entrySet());
 
         Collections.sort(showsSorted, new Comparator<Map.Entry<String, Integer>>() {
             @Override
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                return o2.getValue() - o1.getValue();
+            public int compare(final Map.Entry<String, Integer> o1,
+                               final Map.Entry<String, Integer> o2) {
+                if (o2.getValue().equals(o1.getValue())) {
+                    return showDB.indexOf(o1.getKey()) - showDB.indexOf(o2.getKey());
+                } else {
+                    return o2.getValue().compareTo(o1.getValue());
+                }
             }
         });
 
@@ -230,29 +226,33 @@ public class User {
             showsNames.add(showsSorted.get(i).getKey());
         }
         return showsNames;
-
     }
 
-    public static String getFavourite(ArrayList<User> users, ArrayList<Show> shows, String username) {
+    public static String getFavourite(final ArrayList<User> users,
+                                      final ArrayList<Show> shows, final String username) {
+        ArrayList<String> showTitle = new ArrayList<>();
+        for (Show show : shows) {
+            showTitle.add(show.getTitle());
+        }
         LinkedHashMap<String, Integer> showsFavorite = new LinkedHashMap<>();
         ArrayList<String> showsNames = new ArrayList<>();
         for (User user : users) {
-            for(int i = 0;i < user.getFavoriteShows().size(); i++) {
-                if(!showsFavorite.containsKey(user.getFavoriteShows().get(i))) {
+            for (int i = 0; i < user.getFavoriteShows().size(); i++) {
+                if (!showsFavorite.containsKey(user.getFavoriteShows().get(i))) {
                     showsFavorite.put(user.getFavoriteShows().get(i), 1);
                 } else {
-                    showsFavorite.put(user.getFavoriteShows().get(i), (showsFavorite.get(user.getFavoriteShows().get(i)) + 1));
+                    showsFavorite.put(user.getFavoriteShows().get(i), (showsFavorite
+                            .get(user.getFavoriteShows().get(i)) + 1));
                 }
             }
         }
 
-
-        for(User user : users) {
-            if(user.getUsername().equals(username)) {
-                if(user.getSubscriptionType().equals(Constants.PREMIUM)) {
-                    showsNames = getFavouriteSorted(showsFavorite);
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                if (user.getSubscriptionType().equals(Constants.PREMIUM)) {
+                    showsNames = getFavouriteSorted(showsFavorite, showTitle);
                     for (int i = 0; i < showsNames.size(); i++) {
-                        if(!user.getHistory().containsKey(showsNames.get(i))) {
+                        if (!user.getHistory().containsKey(showsNames.get(i))) {
                             return Constants.FAVORITE_RESULT + showsNames.get(i);
                         }
                     }
@@ -260,5 +260,57 @@ public class User {
             }
         }
         return Constants.FAVORITE_NOT_APPLIED;
+    }
+
+    public static String getPopularRecommandation(ArrayList<User> users, ArrayList<Show> shows, String username) {
+        LinkedHashMap<String, Integer> genresPopularity = new LinkedHashMap<>();
+
+        for (Show show : shows) {
+            ArrayList<String> genres = show.getGenres();
+            for (int i = 0; i < genres.size(); i++) {
+                if (!genresPopularity.containsKey(genres.get(i))) {
+                    genresPopularity.put(genres.get(i), 0);
+                }
+            }
+        }
+
+        for (Show show : shows) {
+            for (User user : users) {
+                if (user.getHistory().containsKey(show.getTitle())) {
+                    for (String genre : show.getGenres()) {
+                        genresPopularity.put(genre, genresPopularity.get(genre) + user.getHistory().get(show.getTitle()));
+                    }
+                }
+            }
+        }
+
+        List<Map.Entry<String, Integer>> genresSorted = new ArrayList<Map.Entry<String, Integer>>(genresPopularity.entrySet());
+
+        Collections.sort(genresSorted, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return (int) ((o2.getValue() - o1.getValue()) * 100);
+            }
+        });
+
+        ArrayList<String> genresPopularitySorted = new ArrayList<>();
+
+        for (int i = 0; i < genresSorted.size(); i++) {
+            genresPopularitySorted.add(genresSorted.get(i).getKey());
+        }
+
+        for (String genrePopularitySorted : genresPopularitySorted) {
+            for (User user : users) {
+                if (user.getUsername().equals(username) && user.getSubscriptionType().equals(Constants.PREMIUM)) {
+                    for (Show show : shows) {
+                        if (show.getGenres().contains(genrePopularitySorted)
+                                && (!user.getHistory().containsKey(show.getTitle()))) {
+                            return Constants.POPULAR_RESULT + show.getTitle();
+                        }
+                    }
+                }
+            }
+        }
+        return Constants.POPULAR_NOT_APPLIED;
     }
 }

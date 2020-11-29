@@ -1,10 +1,10 @@
 package common;
 
-import java.net.PortUnreachableException;
+//import java.net.PortUnreachableException;
 
 /**
  * The class contains the minimum of constants needed.
- *
+ * <p>
  * You can define your own constants here or create separate files.
  */
 public final class Constants {
@@ -108,15 +108,20 @@ public final class Constants {
     public static final String BEST_RESULT = "BestRatedUnseenRecommendation result: ";
     public static final String SEARCH_RESULT = "SearchRecommendation result: ";
     public static final String FAVORITE_RESULT = "FavoriteRecommendation result: ";
+    public static final String POPULAR_RESULT = "PopularRecommendation result: ";
 
     public static final String STANDARD_NOT_APPLIED = "StandardRecommendation cannot be applied!";
-    public static final String BEST_UNSEEN_NOT_APPLIED = "BestRatedUnseenRecommendation cannot be applied!";
+    public static final String BEST_UNSEEN_NOT_APPLIED
+            = "BestRatedUnseenRecommendation cannot be applied!";
     public static final String SEARCH_NOT_APPLIED = "SearchRecommendation cannot be applied!";
     public static final String FAVORITE_NOT_APPLIED = "FavoriteRecommendation cannot be applied!";
-
+    public static final String POPULAR_NOT_APPLIED = "PopularRecommendation cannot be applied!";
 
     public static final String SEARCH = "search";
     public static final String BEST_UNSEEN = "best_unseen";
+    public static final String POPULAR = "popular";
+
+    public static final Integer ONE_HUNDRED = 100;
 
     public static final String PREMIUM = "PREMIUM";
 }

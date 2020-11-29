@@ -36,5 +36,5 @@ public class Show {
 
     public Double Average() {
         return average;
-    };
+    }
 }
