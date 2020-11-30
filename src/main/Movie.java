@@ -44,7 +44,7 @@ public class Movie extends Show {
     }
 
     @Override
-    public final Double Average() {
+    public final Double average() {
         return this.average;
     }
 
@@ -251,9 +251,9 @@ public class Movie extends Show {
         LinkedHashMap<String, Double> moviesRated = new LinkedHashMap<String, Double>();
 
         for (Movie movie : movies) {
-            if (!moviesRated.containsKey(movie.getTitle()) && movie.Average() != 0) {
+            if (!moviesRated.containsKey(movie.getTitle()) && movie.average() != 0) {
                 // pentru fiecare film pastrez nota
-                moviesRated.put(movie.getTitle(), movie.Average());
+                moviesRated.put(movie.getTitle(), movie.average());
             }
         }
 

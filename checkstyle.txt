@@ -1,7 +1,2 @@
 Starting audit...
-[ERROR] C:\Users\iarin\OneDrive\Desktop\teme-tema1-2020\teme\tema1\Tema-POO-2020\.\src\main\Main.java:71:5: Method length is 323 lines (max allowed is 150). [MethodLength]
-[ERROR] C:\Users\iarin\OneDrive\Desktop\teme-tema1-2020\teme\tema1\Tema-POO-2020\.\src\main\Main.java:371: Line is longer than 100 characters (found 101). [LineLength]
-[ERROR] C:\Users\iarin\OneDrive\Desktop\teme-tema1-2020\teme\tema1\Tema-POO-2020\.\src\main\Main.java:375: Line is longer than 100 characters (found 103). [LineLength]
-[ERROR] C:\Users\iarin\OneDrive\Desktop\teme-tema1-2020\teme\tema1\Tema-POO-2020\.\src\main\Show.java:47:19: Name 'Average' must match pattern '^[a-z][a-zA-Z0-9]*$'. [MethodName]
 Audit done.
-Checkstyle ends with 4 errors.

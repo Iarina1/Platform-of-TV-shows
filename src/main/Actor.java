@@ -222,9 +222,9 @@ public class Actor {
             for (int i = 0; i < actor.getFilmography().size(); i++) {
                 for (Show show : shows) {
                     if (show.getTitle().equals(actor.getFilmography().get(i))
-                            && (show.Average() != 0)) {
+                            && (show.average() != 0)) {
                         // sum formata din notele video in care au jucat
-                        sum += show.Average();
+                        sum += show.average();
                         nr++;
                     }
                 }

@@ -1,7 +1,8 @@
 link github: https://github.com/Iarina1/Tema-POO-2020
 
-In main imi creez ArrayList de filme, seriale, videoclipuri(filme + seriale) si utilizatori. In functie de parametri
-primiti, apelez fct respective.
+In main imi creez ArrayList de filme, seriale, videoclipuri(filme + seriale) si utilizatori. In clasele
+ActionQuery, NewActionQuery, ActionRecommendation si ActionCommand apelez fct necesare pt rezolvarea
+task-urilor.
 
 1.Comenzi
     1.1.Favorite

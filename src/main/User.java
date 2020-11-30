@@ -170,7 +170,7 @@ public class User {
                                                   final String username) {
         LinkedHashMap<String, Double> showsBackup = new LinkedHashMap<>();
         for (Show show : shows) {
-            showsBackup.put(show.getTitle(), show.Average());
+            showsBackup.put(show.getTitle(), show.average());
         }
 
         List<Map.Entry<String, Double>> showSorted
@@ -241,7 +241,7 @@ public class User {
         for (Show show : shows) {
             if (show.getGenres().contains(genre)) {
                 // cheie titlu film/serial : valoare nota
-                showsBackup.put(show.getTitle(), show.Average());
+                showsBackup.put(show.getTitle(), show.average());
             }
         }
 

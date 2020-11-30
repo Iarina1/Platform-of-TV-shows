@@ -44,7 +44,7 @@ public class Show {
      *
      * @return
      */
-    public Double Average() {
+    public Double average() {
         return average;
     }
 

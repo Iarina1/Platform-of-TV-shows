@@ -40,7 +40,7 @@ public class Serial extends Show {
     }
 
     @Override
-    public final Double Average() {
+    public final Double average() {
         return this.average;
     }
 
@@ -306,9 +306,9 @@ public class Serial extends Show {
         LinkedHashMap<String, Double> serialsRated = new LinkedHashMap<String, Double>();
 
         for (Serial serial : serials) {
-            if (!serialsRated.containsKey(serial.getTitle()) && serial.Average() != 0) {
+            if (!serialsRated.containsKey(serial.getTitle()) && serial.average() != 0) {
                 // pentru fiecare serial pastrez nota
-                serialsRated.put(serial.getTitle(), serial.Average());
+                serialsRated.put(serial.getTitle(), serial.average());
             }
         }
 
