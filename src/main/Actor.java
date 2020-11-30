@@ -76,12 +76,14 @@ public class Actor {
         }
         for (Actor actor : actors) {
             int isGood = 1;
+            // salvez cuvintele din descriere
             String[] actorDescription;
             actorDescription = actor.getCareerDescription().toLowerCase().split("[^a-zA-Z]");
             ArrayList<String> actorDescriptionArrayList
                     = new ArrayList<>(Arrays.asList(actorDescription));
             for (String filter : filters) {
                 if (!actorDescriptionArrayList.contains(filter)) {
+                    // daca in descriere nu e min un cuv
                     isGood = 0;
                 }
             }
@@ -89,6 +91,8 @@ public class Actor {
                 actorsNames.remove(actor.getName());
             }
         }
+
+        // sortare
 
         Collections.sort(actorsNames);
         if (sortType.equals(Constants.DESC)) {
@@ -113,6 +117,7 @@ public class Actor {
 
             for (String award : awards) {
                 if (!actor.getAwards().containsKey(Utils.stringToAwards(award))) {
+                    // actorul nu are cel putin un premiu
                     isGood = 0;
                 }
             }
@@ -120,8 +125,10 @@ public class Actor {
             if (isGood == 1) {
                 int numberAwards = 0;
                 for (ActorsAwards key : actor.getAwards().keySet()) {
+                    // calculez nr total de premii ale actorului
                     numberAwards += actor.getAwards().get(key);
                 }
+                // actualizez nr de premii
                 actorsAwards.put(actor.getName(), numberAwards);
             }
         }
@@ -167,6 +174,7 @@ public class Actor {
                 = new ArrayList<Map.Entry<String, Double>>(actorsLinkedHashMap.entrySet());
         ArrayList<String> actorsNames = new ArrayList<String>();
 
+        // sortarea
         Collections.sort(actorsSorted, new Comparator<Map.Entry<String, Double>>() {
             public int compare(final Map.Entry<String, Double> o1,
                                final Map.Entry<String, Double> o2) {
@@ -182,6 +190,7 @@ public class Actor {
             Collections.reverse(actorsSorted);
         }
 
+        // rezultatul final
         if (actorsSorted.size() < n) {
             for (int i = 0; i < actorsSorted.size(); i++) {
                 actorsNames.add(actorsSorted.get(i).getKey());
@@ -214,6 +223,7 @@ public class Actor {
                 for (Show show : shows) {
                     if (show.getTitle().equals(actor.getFilmography().get(i))
                             && (show.Average() != 0)) {
+                        // sum formata din notele video in care au jucat
                         sum += show.Average();
                         nr++;
                     }
@@ -223,13 +233,17 @@ public class Actor {
             if (nr != 0) {
                 average = sum / nr;
             }
+
+            // actualizare medie actor
             actorsAverage.put(actor.getName(), average);
         }
 
+        // sterg din lista actorii care au media 0
         while (actorsAverage.values().remove(0.0)) {
             continue;
         }
 
+        // sortez actorii
         actorsNames = getResultAverage(actorsAverage, sortType, n);
         return Constants.QUERY_RESULT + actorsNames.toString();
     }

@@ -117,6 +117,7 @@ public class User {
             }
         }
 
+        // sortare nr note date + alfabetic
         userRatings.sort(User.getUserRatingsList());
 
         if (sortType.equals(Constants.DESC)) {
@@ -142,13 +143,14 @@ public class User {
      * @param username
      * @return
      */
-    public static String RecommendationStandard(final ArrayList<User> users,
+    public static String getRecommendationStandard(final ArrayList<User> users,
                                                 final ArrayList<Show> shows,
                                                 final String username) {
         for (User user : users) {
             if (user.getUsername().equals(username)) {
                 for (Show show : shows) {
                     if (!user.getHistory().containsKey(show.getTitle())) {
+                        // primul video negasit in history
                         return Constants.STANDARD_RESULT + show.getTitle();
                     }
                 }
@@ -163,7 +165,7 @@ public class User {
      * @param username
      * @return
      */
-    public static String BestUnseenRecommendation(final ArrayList<User> users,
+    public static String getBestUnseenRecommendation(final ArrayList<User> users,
                                                   final ArrayList<Show> shows,
                                                   final String username) {
         LinkedHashMap<String, Double> showsBackup = new LinkedHashMap<>();
@@ -174,6 +176,7 @@ public class User {
         List<Map.Entry<String, Double>> showSorted
                 = new ArrayList<Map.Entry<String, Double>>(showsBackup.entrySet());
 
+        // sortare
         Collections.sort(showSorted, new Comparator<Map.Entry<String, Double>>() {
             public int compare(final Map.Entry<String, Double> o1,
                                final Map.Entry<String, Double> o2) {
@@ -237,6 +240,7 @@ public class User {
 
         for (Show show : shows) {
             if (show.getGenres().contains(genre)) {
+                // cheie titlu film/serial : valoare nota
                 showsBackup.put(show.getTitle(), show.Average());
             }
         }
@@ -244,6 +248,7 @@ public class User {
         for (User user : users) {
             if (user.getUsername().equals(username)) {
                 if (user.getSubscriptionType().equals(Constants.PREMIUM)) {
+                    // sortare
                     showsNames = getSearchSorted(showsBackup);
                     for (int i = 0; i < showsNames.size(); i++) {
                         if (!user.getHistory().containsKey(showsNames.get(i))) {
@@ -305,11 +310,14 @@ public class User {
         for (Show show : shows) {
             showNames.add(show.getTitle());
         }
+
         LinkedHashMap<String, Integer> showsFavorite = new LinkedHashMap<>();
         ArrayList<String> showsNames = new ArrayList<>();
+
         for (User user : users) {
             for (int i = 0; i < user.getFavoriteShows().size(); i++) {
                 if (!showsFavorite.containsKey(user.getFavoriteShows().get(i))) {
+                    // nr de aparitii al titlului in listele de fav ale user-ilor
                     showsFavorite.put(user.getFavoriteShows().get(i), 1);
                 } else {
                     showsFavorite.put(user.getFavoriteShows().get(i), (showsFavorite
@@ -378,6 +386,7 @@ public class User {
             for (User user : users) {
                 if (user.getHistory().containsKey(show.getTitle())) {
                     for (String genre : show.getGenres()) {
+                        // LinkedHashMap numeGen : popularitate
                         genresPopularity.put(genre, genresPopularity.get(genre)
                                 + user.getHistory().get(show.getTitle()));
                     }
@@ -385,6 +394,7 @@ public class User {
             }
         }
 
+        // sortare
         List<Map.Entry<String, Integer>> genresSorted =  getPopularSorted(genresPopularity);
 
         for (int i = 0; i < genresSorted.size(); i++) {

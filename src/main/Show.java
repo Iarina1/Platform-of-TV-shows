@@ -107,10 +107,12 @@ public class Show {
             for (Show show : shows) {
                 if (user.getHistory().containsKey(show.getTitle())) {
                     if (showsLinkedHashMap.containsKey(show.getTitle())) {
+                        // actualizat nr de vizualizari
                         showsLinkedHashMap.put(show.getTitle(),
                                 showsLinkedHashMap.get(show.getTitle())
                                 + user.getHistory().get(show.getTitle()));
                     } else {
+                        // adaug videoclipul in dictionar
                         showsLinkedHashMap.put(show.getTitle(),
                                 user.getHistory().get(show.getTitle()));
                     }
@@ -118,6 +120,7 @@ public class Show {
             }
         }
 
+        // sortare
         showsNames = getNamesSortedShow(showsLinkedHashMap, sortType, n);
 
         return Constants.QUERY_RESULT + showsNames.toString();

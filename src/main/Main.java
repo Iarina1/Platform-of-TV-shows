@@ -368,11 +368,11 @@ public final class Main {
                     .equals(Constants.RECOMMENDATION)) {
                 if (input.getCommands().get(i).getType().equals(Constants.STANDARD)) {
                     arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
-                            .getActionId(), null, User.RecommendationStandard(usersList, showList,
+                            .getActionId(), null, User.getRecommendationStandard(usersList, showList,
                             input.getCommands().get(i).getUsername())));
                 } else if (input.getCommands().get(i).getType().equals(Constants.BEST_UNSEEN)) {
                     arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)
-                            .getActionId(), null, User.BestUnseenRecommendation(usersList, showList,
+                            .getActionId(), null, User.getBestUnseenRecommendation(usersList, showList,
                             input.getCommands().get(i).getUsername())));
                 } else if (input.getCommands().get(i).getType().equals(Constants.SEARCH)) {
                     arrayResult.add(fileWriter.writeFile(input.getCommands().get(i)

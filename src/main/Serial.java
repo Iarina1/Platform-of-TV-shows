@@ -75,6 +75,7 @@ public class Serial extends Show {
             } else {
                 this.userEvidence.get(user).add(season);
                 ArrayList<Double> newGrades = new ArrayList<Double>();
+                // note pe sezoane
                 newGrades.add(gradeSeasons.get(season).get(0) + grade);
                 newGrades.add(gradeSeasons.get(season).get(1) + 1);
                 newGrades.add(newGrades.get(0) / newGrades.get(1));
@@ -83,6 +84,7 @@ public class Serial extends Show {
                 for (int i = 1; i < gradeSeasons.size() + 1; i++) {
                     sum += gradeSeasons.get(i).get(0);
                 }
+                // nota serial
                 this.setAverage(sum / gradeSeasons.size());
                 user.setNrRatings(user.getNrRatings() + 1);
                 return Constants.SUCCESS + title + Constants.WAS_RATED
@@ -125,6 +127,7 @@ public class Serial extends Show {
                 = new ArrayList<Map.Entry<String, Integer>>(serialsLinkedHashMap.entrySet());
         ArrayList<String> serialsNames = new ArrayList<String>();
 
+        // valoare + sortare alfabetica
         Collections.sort(serialsSorted, new Comparator<Map.Entry<String, Integer>>() {
             @Override
             public int compare(final Map.Entry<String, Integer> o1,
@@ -162,6 +165,7 @@ public class Serial extends Show {
     private static int getDuration(final Serial serial) {
         int duration = 0;
         for (int i = 0; i < serial.getNumberOfSeasons(); i++) {
+            // durata unui serial e suma duratelor sezoanelor
             duration += serial.getSeasons().get(i).getDuration();
         }
         return duration;
@@ -192,12 +196,14 @@ public class Serial extends Show {
                                            final int n, final String sortType) {
         ArrayList<String> serialsNames = new ArrayList<String>();
 
+        // sortare dupa durata + alfabetic
         serials.sort(Serial.getLongestSerialList());
 
         if (sortType.equals(Constants.DESC)) {
             Collections.reverse(serials);
         }
 
+        // titlurile filmelor din output
         if (serials.size() < n) {
             for (Serial serial : serials) {
                 serialsNames.add(serial.getTitle());
@@ -228,14 +234,17 @@ public class Serial extends Show {
                 if (user.getFavoriteShows().contains(serials.get(i).getTitle())) {
                     if (serialsFavourite.containsKey(serials.get(i).getTitle())) {
                         serialsFavourite.put(serials.get(i).getTitle(),
+                                // actualizez nr de aparitii in lista de fav
                                 serialsFavourite.get(serials.get(i).getTitle()) + 1);
                     } else {
+                        // adaug serialul in LinkedHashMap
                         serialsFavourite.put(serials.get(i).getTitle(), 1);
                     }
                 }
             }
         }
 
+        // sortare
         serialsNames = getResult(serialsFavourite, sortType, n);
 
         return Constants.QUERY_RESULT + serialsNames.toString();
@@ -298,10 +307,12 @@ public class Serial extends Show {
 
         for (Serial serial : serials) {
             if (!serialsRated.containsKey(serial.getTitle()) && serial.Average() != 0) {
+                // pentru fiecare serial pastrez nota
                 serialsRated.put(serial.getTitle(), serial.Average());
             }
         }
 
+        // sortarea
         serialsNames = getResultRatingSerial(serialsRated, sortType, n);
         return Constants.QUERY_RESULT + serialsNames;
     }

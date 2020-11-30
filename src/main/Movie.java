@@ -67,6 +67,7 @@ public class Movie extends Show {
         } else {
             this.userArrayList.add(user.getUsername());
             this.sum += grade;
+            // media notelor primite de la toti utilizatorii
             this.average = this.sum / userArrayList.size();
             user.setNrRatings(user.getNrRatings() + 1);
             return Constants.SUCCESS + title + Constants.WAS_RATED + grade + Constants.BY
@@ -142,12 +143,14 @@ public class Movie extends Show {
                                           final int n, final String sortType) {
         ArrayList<String> moviesNames = new ArrayList<String>();
 
+        // sortare dupa durata + alfabetic
         movies.sort(Movie.getLongestMovieList());
 
         if (sortType.equals(Constants.DESC)) {
             Collections.reverse(movies);
         }
 
+        // titlurile filmelor din output
         if (movies.size() < n) {
             for (Movie movie : movies) {
                 moviesNames.add(movie.getTitle());
@@ -178,14 +181,17 @@ public class Movie extends Show {
                 if (user.getFavoriteShows().contains(movies.get(i).getTitle())) {
                     if (moviesFavourite.containsKey(movies.get(i).getTitle())) {
                         moviesFavourite.put(movies.get(i).getTitle(),
+                                // actualizez nr de aparitii in lista de fav
                                 moviesFavourite.get(movies.get(i).getTitle()) + 1);
                     } else {
+                        // adaug filmul in LinkedHashMap
                         moviesFavourite.put(movies.get(i).getTitle(), 1);
                     }
                 }
             }
         }
 
+        // sortare
         moviesNames = getResult(moviesFavourite, sortType, n);
 
         return Constants.QUERY_RESULT + moviesNames.toString();
@@ -246,10 +252,12 @@ public class Movie extends Show {
 
         for (Movie movie : movies) {
             if (!moviesRated.containsKey(movie.getTitle()) && movie.Average() != 0) {
+                // pentru fiecare film pastrez nota
                 moviesRated.put(movie.getTitle(), movie.Average());
             }
         }
 
+        // sortarea
         moviesNames = getResultRatingMovies(moviesRated, sortType, n);
         return Constants.QUERY_RESULT + moviesNames;
     }
